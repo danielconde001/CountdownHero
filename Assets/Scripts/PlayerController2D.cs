@@ -64,6 +64,9 @@ public class PlayerController2D : MonoBehaviour
     /// <summary>True while downward speed is being limited against a wall.</summary>
     public bool IsWallSliding { get; private set; }
 
+    /// <summary>True while an external system, such as combat, owns the player.</summary>
+    public bool IsControlLocked { get; private set; }
+
     private Rigidbody2D rb;
     private Collider2D bodyCollider;
     private PhysicsMaterial2D runtimeMovementMaterial;
@@ -159,6 +162,11 @@ public class PlayerController2D : MonoBehaviour
 
     private void Update()
     {
+        if (IsControlLocked)
+        {
+            return;
+        }
+
         moveInputVector = moveAction != null ? moveAction.ReadValue<Vector2>() : Vector2.zero;
         moveInput = moveInputVector.x;
         bool jumpPressed = jumpAction != null && jumpAction.WasPressedThisFrame();
@@ -218,6 +226,11 @@ public class PlayerController2D : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (IsControlLocked)
+        {
+            return;
+        }
+
         isGrounded = CheckGrounded();
 
         if (ledgeState == LedgeState.Hanging)
@@ -479,6 +492,39 @@ public class PlayerController2D : MonoBehaviour
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+
+    /// <summary>
+    /// Hands control of the player to or from an external gameplay system.
+    /// Combat uses a kinematic body so transition animation is deterministic.
+    /// </summary>
+    public void SetControlLocked(bool locked)
+    {
+        if (IsControlLocked == locked)
+        {
+            return;
+        }
+
+        IsControlLocked = locked;
+        moveInput = 0f;
+        moveInputVector = Vector2.zero;
+        jumpBufferCounter = 0f;
+        jumpCutRequested = false;
+        IsWallSliding = false;
+
+        if (locked)
+        {
+            ledgeState = LedgeState.None;
+            IsLedgeClimbing = false;
+            bodyCollider.enabled = true;
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            return;
+        }
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = DefaultGravityScale;
+        rb.linearVelocity = Vector2.zero;
     }
 
     private bool CheckGrounded()

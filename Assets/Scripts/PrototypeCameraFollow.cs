@@ -11,19 +11,40 @@ public class PrototypeCameraFollow : MonoBehaviour
     [SerializeField] private Vector3 offset = new Vector3(2f, 3.5f, -15f);
     [SerializeField] private float followSpeed = 5f;
     [FormerlySerializedAs("levelBounds")]
-    [SerializeField] private Vector2 horizontalBounds = new Vector2(-6.5f, 15.5f);
+    [SerializeField] private Vector2 horizontalBounds = new Vector2(-6.5f, 25.5f);
     [SerializeField] private Vector2 verticalBounds = new Vector2(-10f, 7f);
     [SerializeField] private float verticalDeadZone = 1.25f;
+
+    private bool useBattleFocus;
+    private Vector3 battleFocus;
 
     public void Initialize(Transform followTarget)
     {
         target = followTarget;
     }
 
+    public void EnterBattleView(Vector3 focus)
+    {
+        battleFocus = focus;
+        useBattleFocus = true;
+    }
+
+    public void ExitBattleView()
+    {
+        useBattleFocus = false;
+    }
+
     private void LateUpdate()
     {
         if (target == null)
         {
+            return;
+        }
+
+        if (useBattleFocus)
+        {
+            Vector3 battleDestination = new Vector3(battleFocus.x, battleFocus.y, offset.z);
+            transform.position = SmoothTowards(battleDestination);
             return;
         }
 
@@ -45,6 +66,14 @@ public class PrototypeCameraFollow : MonoBehaviour
             : desiredY - Mathf.Sign(verticalDifference) * verticalDeadZone;
 
         Vector3 destination = new Vector3(targetX, targetY, offset.z);
-        transform.position = Vector3.Lerp(transform.position, destination, 1f - Mathf.Exp(-followSpeed * Time.deltaTime));
+        transform.position = SmoothTowards(destination);
+    }
+
+    private Vector3 SmoothTowards(Vector3 destination)
+    {
+        return Vector3.Lerp(
+            transform.position,
+            destination,
+            1f - Mathf.Exp(-followSpeed * Time.deltaTime));
     }
 }
