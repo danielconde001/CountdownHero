@@ -98,7 +98,7 @@ public static class PrototypeTimedPlatformBuilder
         TimedSwitch timedSwitch = switchObject.AddComponent<TimedSwitch>();
         timedSwitch.Initialize(
             TimedSwitch.ActivationMode.OnTriggerEnter,
-            new[] { timedPlatform },
+            new SwitchTarget[] { timedPlatform },
             0.5f);
     }
 

@@ -95,6 +95,7 @@ public class PlayerController2D : MonoBehaviour
     private float ledgeDirection;
     private float ledgeCooldownTimer;
     private bool dropRequested;
+    private Vector2 pendingExternalAcceleration;
     private readonly RaycastHit2D[] ledgeCastHits = new RaycastHit2D[8];
     private readonly Collider2D[] ledgeOverlapResults = new Collider2D[8];
     private readonly Collider2D[] groundCheckResults = new Collider2D[8];
@@ -158,6 +159,7 @@ public class PlayerController2D : MonoBehaviour
 
         IsLedgeClimbing = false;
         IsWallSliding = false;
+        pendingExternalAcceleration = Vector2.zero;
     }
 
     private void OnDestroy()
@@ -318,7 +320,11 @@ public class PlayerController2D : MonoBehaviour
             newY = Mathf.Max(newY, -wallSlideMaxFallSpeed);
         }
 
-        rb.linearVelocity = new Vector2(newX, newY);
+        // Environmental mechanics queue acceleration between physics ticks.
+        // Applying it last prevents regular movement from erasing the impulse.
+        Vector2 externalVelocityChange = pendingExternalAcceleration * Time.fixedDeltaTime;
+        pendingExternalAcceleration = Vector2.zero;
+        rb.linearVelocity = new Vector2(newX, newY) + externalVelocityChange;
     }
 
     private bool CanWallSlide()
@@ -531,6 +537,7 @@ public class PlayerController2D : MonoBehaviour
         jumpBufferCounter = 0f;
         jumpCutRequested = false;
         IsWallSliding = false;
+        pendingExternalAcceleration = Vector2.zero;
 
         if (locked)
         {
@@ -545,6 +552,18 @@ public class PlayerController2D : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = DefaultGravityScale;
         rb.linearVelocity = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Queues acceleration from wind, geysers, or other environmental forces.
+    /// The controller consumes it during the next physics update.
+    /// </summary>
+    public void AddExternalAcceleration(Vector2 acceleration)
+    {
+        if (!IsControlLocked && !IsLedgeClimbing)
+        {
+            pendingExternalAcceleration += acceleration;
+        }
     }
 
     private bool CheckGrounded()

@@ -16,7 +16,7 @@ public class TimedSwitch : MonoBehaviour
     }
 
     [SerializeField] private ActivationMode mode = ActivationMode.OnTriggerEnter;
-    [SerializeField] private TimedPlatform[] targets;
+    [SerializeField] private SwitchTarget[] targets;
     [SerializeField, Min(0f)] private float cooldown = 0.5f;
     [SerializeField] private GameObject interactPrompt;
 
@@ -119,7 +119,7 @@ public class TimedSwitch : MonoBehaviour
 
     public void Initialize(
         ActivationMode activationMode,
-        TimedPlatform[] timedTargets,
+        SwitchTarget[] timedTargets,
         float cooldownDuration,
         GameObject prompt = null)
     {
@@ -165,7 +165,7 @@ public class TimedSwitch : MonoBehaviour
             return;
         }
 
-        foreach (TimedPlatform target in targets)
+        foreach (SwitchTarget target in targets)
         {
             if (target != null)
             {

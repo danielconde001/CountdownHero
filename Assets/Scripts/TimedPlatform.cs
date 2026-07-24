@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// Runs a countdown-gated platform behavior such as appearing, moving, rotating,
 /// scaling, or firing designer-wired events.
 /// </summary>
-public class TimedPlatform : MonoBehaviour
+public class TimedPlatform : SwitchTarget
 {
     public enum BehaviorMode
     {
@@ -89,7 +89,7 @@ public class TimedPlatform : MonoBehaviour
     }
 
     /// <summary>Starts the countdown sequence unless this platform is already busy.</summary>
-    public void Activate()
+    public override void Activate()
     {
         if (isSequenceRunning)
         {
