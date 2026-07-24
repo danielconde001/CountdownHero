@@ -10,38 +10,36 @@ public class PlayerAnimator : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private MMF_Player playerIdleFeedback;
+    [SerializeField] private MMF_Player playerRunningFeedback;
+
+    private bool isMoving = false;
 
     private void Update()
     {
-        if(playerController2D.IsWallSliding == false)
+        if(playerController2D.IsMoving == true && isMoving == false)
         {
-            if(playerController2D.IsAirborne == false)
-            {
-                if(playerController2D.IsMoving == true)
-                {
-                    playerAnimator.SetTrigger("Player Running");
-                }
-                else
-                {
-                    playerAnimator.SetTrigger("Player Idle");
-                }
-            }
-            else
-            {
-                playerAnimator.SetTrigger("Player Mid Air");
-                
-            }
-
+            playerIdleFeedback.StopFeedbacks();
+            playerRunningFeedback.PlayFeedbacks();
+            playerAnimator.SetBool("Player Moving", playerController2D.IsMoving);
+            isMoving = true;
         }
-        else
+        else if(playerController2D.IsMoving == false && isMoving == true)
         {
-            playerAnimator.SetTrigger("Player Wall Slide");
+            playerIdleFeedback.PlayFeedbacks();
+            playerRunningFeedback.StopFeedbacks();
+            playerAnimator.SetBool("Player Moving", playerController2D.IsMoving);
+            isMoving = false;
         }
 
-        if(playerController2D.IsLedgeClimbing == true)
+        if(playerController2D.IsAirborne == true)
         {
-            playerAnimator.SetTrigger("Player Ledge Grab");
+            playerIdleFeedback.StopFeedbacks();
+            playerRunningFeedback.StopFeedbacks();
         }
+
+        playerAnimator.SetBool("Player Airborne", playerController2D.IsAirborne);
+        playerAnimator.SetBool("Player Ledge Climbing", playerController2D.IsLedgeClimbing);
+        playerAnimator.SetBool("Player Wall Sliding", playerController2D.IsWallSliding);
 
         if(playerController2D.IsFacingLeft == true)
         {
