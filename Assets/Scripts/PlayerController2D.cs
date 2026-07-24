@@ -67,8 +67,8 @@ public class PlayerController2D : MonoBehaviour
     /// <summary>True while an external system, such as combat, owns the player.</summary>
     public bool IsControlLocked { get; private set; }
 
-    /// <summary>True when the player is actively pushing left and not right.</summary>
-    public bool IsMovingLeft => moveInput < -InputThreshold;
+    public bool IsMoving { get; private set; }
+    public bool IsFacingLeft { get; private set; }
 
     /// <summary>True when the player is not touching the ground.</summary>
     public bool IsAirborne => !isGrounded;
@@ -130,6 +130,8 @@ public class PlayerController2D : MonoBehaviour
         groundFilter = new ContactFilter2D();
         groundFilter.SetLayerMask(groundLayerMask);
         groundFilter.useTriggers = false;
+
+        IsFacingLeft = true;
     }
 
     private void OnEnable()
@@ -175,6 +177,18 @@ public class PlayerController2D : MonoBehaviour
 
         moveInputVector = moveAction != null ? moveAction.ReadValue<Vector2>() : Vector2.zero;
         moveInput = moveInputVector.x;
+
+        if(IsFacingLeft == true && moveInput > 0.0f)
+        {
+            IsFacingLeft = false;
+        }
+        else if(IsFacingLeft == false && moveInput < 0.0f)
+        {
+            IsFacingLeft = true;
+        }
+
+        IsMoving = moveInput == 0.0f ? false : true;
+
         bool jumpPressed = jumpAction != null && jumpAction.WasPressedThisFrame();
         isGrounded = CheckGrounded();
 
