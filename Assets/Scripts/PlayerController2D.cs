@@ -67,6 +67,12 @@ public class PlayerController2D : MonoBehaviour
     /// <summary>True while an external system, such as combat, owns the player.</summary>
     public bool IsControlLocked { get; private set; }
 
+    /// <summary>True when the player is actively pushing left and not right.</summary>
+    public bool IsMovingLeft => moveInput < -InputThreshold;
+
+    /// <summary>True when the player is not touching the ground.</summary>
+    public bool IsAirborne => !isGrounded;
+
     private Rigidbody2D rb;
     private Collider2D bodyCollider;
     private PhysicsMaterial2D runtimeMovementMaterial;
@@ -573,5 +579,13 @@ public class PlayerController2D : MonoBehaviour
         var map = inputActions.FindActionMap(actionMapName, true);
         moveAction = map.FindAction(moveActionName, true);
         jumpAction = map.FindAction(jumpActionName, true);
+    }
+
+    /// <summary>
+    /// Returns whether the player is currently airborne.
+    /// </summary>
+    public bool IsNotGrounded()
+    {
+        return IsAirborne;
     }
 }
