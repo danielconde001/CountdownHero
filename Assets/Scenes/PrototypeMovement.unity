@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ce917646fa4c76905c694106a5b599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimedSwitch
-  mode: 0
+  mode: 1
   targets:
   - {fileID: 1878222766}
   cooldown: 0.5
@@ -5245,7 +5245,7 @@ MonoBehaviour:
   target: {fileID: 92732108}
   offset: {x: 2, y: 3.5, z: -15}
   followSpeed: 5
-  horizontalBounds: {x: -6.5, y: 25.5}
+  horizontalBounds: {x: -6.5, y: 50}
   verticalBounds: {x: -10, y: 7}
   verticalDeadZone: 1.25
 --- !u!114 &1637049769
@@ -6017,8 +6017,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878222765}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.35836798, w: 0.93358046}
-  m_LocalPosition: {x: 41.7, y: -1.85, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.026177183, w: 0.99965733}
+  m_LocalPosition: {x: 43.210888, y: -3.0780644, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6026,7 +6026,7 @@ Transform:
   - {fileID: 2044037602}
   - {fileID: 671677530}
   m_Father: {fileID: 470031256}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 3}
 --- !u!1 &1887802658
 GameObject:
   m_ObjectHideFlags: 0
