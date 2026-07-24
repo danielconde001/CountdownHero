@@ -67,6 +67,12 @@ public class PlayerController2D : MonoBehaviour
     /// <summary>True while an external system, such as combat, owns the player.</summary>
     public bool IsControlLocked { get; private set; }
 
+    public bool IsMoving { get; private set; }
+    public bool IsFacingLeft { get; private set; }
+
+    /// <summary>True when the player is not touching the ground.</summary>
+    public bool IsAirborne => !isGrounded;
+
     private Rigidbody2D rb;
     private Collider2D bodyCollider;
     private PhysicsMaterial2D runtimeMovementMaterial;
@@ -89,6 +95,7 @@ public class PlayerController2D : MonoBehaviour
     private float ledgeDirection;
     private float ledgeCooldownTimer;
     private bool dropRequested;
+    private Vector2 pendingExternalAcceleration;
     private readonly RaycastHit2D[] ledgeCastHits = new RaycastHit2D[8];
     private readonly Collider2D[] ledgeOverlapResults = new Collider2D[8];
     private readonly Collider2D[] groundCheckResults = new Collider2D[8];
@@ -124,6 +131,8 @@ public class PlayerController2D : MonoBehaviour
         groundFilter = new ContactFilter2D();
         groundFilter.SetLayerMask(groundLayerMask);
         groundFilter.useTriggers = false;
+
+        IsFacingLeft = true;
     }
 
     private void OnEnable()
@@ -150,6 +159,7 @@ public class PlayerController2D : MonoBehaviour
 
         IsLedgeClimbing = false;
         IsWallSliding = false;
+        pendingExternalAcceleration = Vector2.zero;
     }
 
     private void OnDestroy()
@@ -169,6 +179,18 @@ public class PlayerController2D : MonoBehaviour
 
         moveInputVector = moveAction != null ? moveAction.ReadValue<Vector2>() : Vector2.zero;
         moveInput = moveInputVector.x;
+
+        if(IsFacingLeft == true && moveInput > 0.0f)
+        {
+            IsFacingLeft = false;
+        }
+        else if(IsFacingLeft == false && moveInput < 0.0f)
+        {
+            IsFacingLeft = true;
+        }
+
+        IsMoving = moveInput == 0.0f ? false : true;
+
         bool jumpPressed = jumpAction != null && jumpAction.WasPressedThisFrame();
         isGrounded = CheckGrounded();
 
@@ -298,7 +320,11 @@ public class PlayerController2D : MonoBehaviour
             newY = Mathf.Max(newY, -wallSlideMaxFallSpeed);
         }
 
-        rb.linearVelocity = new Vector2(newX, newY);
+        // Environmental mechanics queue acceleration between physics ticks.
+        // Applying it last prevents regular movement from erasing the impulse.
+        Vector2 externalVelocityChange = pendingExternalAcceleration * Time.fixedDeltaTime;
+        pendingExternalAcceleration = Vector2.zero;
+        rb.linearVelocity = new Vector2(newX, newY) + externalVelocityChange;
     }
 
     private bool CanWallSlide()
@@ -511,6 +537,7 @@ public class PlayerController2D : MonoBehaviour
         jumpBufferCounter = 0f;
         jumpCutRequested = false;
         IsWallSliding = false;
+        pendingExternalAcceleration = Vector2.zero;
 
         if (locked)
         {
@@ -525,6 +552,18 @@ public class PlayerController2D : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = DefaultGravityScale;
         rb.linearVelocity = Vector2.zero;
+    }
+
+    /// <summary>
+    /// Queues acceleration from wind, geysers, or other environmental forces.
+    /// The controller consumes it during the next physics update.
+    /// </summary>
+    public void AddExternalAcceleration(Vector2 acceleration)
+    {
+        if (!IsControlLocked && !IsLedgeClimbing)
+        {
+            pendingExternalAcceleration += acceleration;
+        }
     }
 
     private bool CheckGrounded()
@@ -573,5 +612,13 @@ public class PlayerController2D : MonoBehaviour
         var map = inputActions.FindActionMap(actionMapName, true);
         moveAction = map.FindAction(moveActionName, true);
         jumpAction = map.FindAction(jumpActionName, true);
+    }
+
+    /// <summary>
+    /// Returns whether the player is currently airborne.
+    /// </summary>
+    public bool IsNotGrounded()
+    {
+        return IsAirborne;
     }
 }
