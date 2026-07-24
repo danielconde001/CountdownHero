@@ -89,31 +89,14 @@ public class PrototypeCameraFollow : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Holds the camera at a world-space position until its mode changes.
-    /// The Vector2 overload preserves the camera's current depth.
-    /// </summary>
-    public void FixAt(Vector2 position, bool snap = false)
-    {
-        FixAt(new Vector3(position.x, position.y, transform.position.z), snap);
-    }
-
+    /// <summary>Holds the camera at a world-space position until its mode changes.</summary>
     public void FixAt(Vector3 position, bool snap = false)
     {
         baseFixedPosition = position;
         basePlatformingMode = PlatformingMode.FixedPosition;
         if (snap && zoneOverrides.Count == 0 && !useBattleFocus)
         {
-            transform.position = GetFixedDestination(position);
-        }
-    }
-
-    /// <summary>UnityEvent-friendly helper that fixes the camera at a Transform.</summary>
-    public void FixAtTransform(Transform fixedPoint)
-    {
-        if (fixedPoint != null)
-        {
-            FixAt(fixedPoint.position);
+            transform.position = position;
         }
     }
 
@@ -170,18 +153,22 @@ public class PrototypeCameraFollow : MonoBehaviour
             return;
         }
 
+        transform.position = SmoothTowards(GetPlatformingDestination(ignoreVerticalDeadZone: false));
+    }
+
+    private Vector3 GetPlatformingDestination(bool ignoreVerticalDeadZone)
+    {
         if (CurrentPlatformingMode == PlatformingMode.FixedPosition)
         {
-            transform.position = SmoothTowards(GetFixedDestination(CurrentFixedPosition));
-            return;
+            return CurrentFixedPosition;
         }
 
         if (target == null)
         {
-            return;
+            return transform.position;
         }
 
-        transform.position = SmoothTowards(GetFollowDestination(ignoreVerticalDeadZone: false));
+        return GetFollowDestination(ignoreVerticalDeadZone);
     }
 
     private Vector3 GetFollowDestination(bool ignoreVerticalDeadZone)
@@ -210,21 +197,9 @@ public class PrototypeCameraFollow : MonoBehaviour
         return new Vector3(targetX, targetY, offset.z);
     }
 
-    private Vector3 GetFixedDestination(Vector3 position)
-    {
-        return position;
-    }
-
     private void SnapToCurrentPlatformingView()
     {
-        if (CurrentPlatformingMode == PlatformingMode.FixedPosition)
-        {
-            transform.position = GetFixedDestination(CurrentFixedPosition);
-        }
-        else if (target != null)
-        {
-            transform.position = GetFollowDestination(ignoreVerticalDeadZone: true);
-        }
+        transform.position = GetPlatformingDestination(ignoreVerticalDeadZone: true);
     }
 
     private Vector3 SmoothTowards(Vector3 destination)

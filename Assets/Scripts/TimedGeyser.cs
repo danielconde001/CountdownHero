@@ -23,16 +23,13 @@ public class TimedGeyser : SwitchTarget
     [SerializeField] private UnityEvent onActivated = new UnityEvent();
     [SerializeField] private UnityEvent onDeactivated = new UnityEvent();
 
-    private Collider2D forceZone;
     private Coroutine sequenceRoutine;
     private bool isActive;
 
     private void Awake()
     {
-        forceZone = GetComponent<Collider2D>();
-        forceZone.isTrigger = true;
-        SetActive(false);
-        ClearCountdown();
+        GetComponent<Collider2D>().isTrigger = true;
+        ResetState();
     }
 
     private void OnDisable()
@@ -43,8 +40,7 @@ public class TimedGeyser : SwitchTarget
             sequenceRoutine = null;
         }
 
-        SetActive(false);
-        ClearCountdown();
+        ResetState();
     }
 
     /// <summary>Starts the geyser sequence unless one is already running.</summary>
@@ -96,7 +92,7 @@ public class TimedGeyser : SwitchTarget
         }
 
         Rigidbody2D playerBody = other.attachedRigidbody;
-        Vector2 direction = transform.up.normalized;
+        Vector2 direction = transform.up;
         if (playerBody != null && Vector2.Dot(playerBody.linearVelocity, direction) >= maximumSpeed)
         {
             return;
@@ -136,6 +132,12 @@ public class TimedGeyser : SwitchTarget
         {
             activeVisual.SetActive(active);
         }
+    }
+
+    private void ResetState()
+    {
+        SetActive(false);
+        ClearCountdown();
     }
 
     private void ClearCountdown()

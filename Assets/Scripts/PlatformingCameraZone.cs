@@ -55,10 +55,7 @@ public class PlatformingCameraZone : MonoBehaviour
             return;
         }
 
-        Vector3 position = fixedPoint != null
-            ? fixedPoint.position
-            : transform.position;
-        cameraFollow.SetZoneOverride(this, modeOnEnter, position, snapOnEnter);
+        cameraFollow.SetZoneOverride(this, modeOnEnter, GetCameraPoint(), snapOnEnter);
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -83,10 +80,7 @@ public class PlatformingCameraZone : MonoBehaviour
             case ExitBehavior.KeepCurrentMode:
                 if (modeOnEnter == PrototypeCameraFollow.PlatformingMode.FixedPosition)
                 {
-                    Vector3 position = fixedPoint != null
-                        ? fixedPoint.position
-                        : transform.position;
-                    cameraFollow.FixAt(position);
+                    cameraFollow.FixAt(GetCameraPoint());
                 }
                 else
                 {
@@ -123,6 +117,11 @@ public class PlatformingCameraZone : MonoBehaviour
         }
 
         return cameraFollow != null;
+    }
+
+    private Vector3 GetCameraPoint()
+    {
+        return fixedPoint != null ? fixedPoint.position : transform.position;
     }
 
 #if UNITY_EDITOR
