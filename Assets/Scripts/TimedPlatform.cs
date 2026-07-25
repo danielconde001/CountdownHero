@@ -304,8 +304,9 @@ public class TimedPlatform : SwitchTarget
             return;
         }
 
-        // The platform moves by transform, so riders need the same position delta
-        // applied to their Rigidbody2D or they will be left behind.
+        // Move platforms are animated by changing this transform directly.
+        // Rigidbody2D passengers do not inherit that motion automatically, so
+        // apply the same delta to keep the player planted on top.
         foreach (Rigidbody2D passenger in passengers)
         {
             if (passenger == null)
@@ -335,8 +336,9 @@ public class TimedPlatform : SwitchTarget
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        // Only carry the player when they are riding the top face. Side contacts
-        // should not glue the player to a moving platform.
+        // Only carry the player while they are standing on the top face.
+        // Side contacts must stay free so pushing into the platform wall does
+        // not drag the player along with it.
         if (mode != BehaviorMode.Move
             || !collision.gameObject.TryGetComponent(out PlayerController2D _)
             || !collision.gameObject.TryGetComponent(out Rigidbody2D passenger))
@@ -369,6 +371,8 @@ public class TimedPlatform : SwitchTarget
             return false;
         }
 
+        // In this collision callback, a downward-facing contact normal means
+        // the player's collider is pressing onto the platform from above.
         for (int i = 0; i < collision.contactCount; i++)
         {
             if (collision.GetContact(i).normal.y < -0.5f)
