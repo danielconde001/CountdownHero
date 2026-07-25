@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class FadeManager : MonoBehaviour
@@ -42,13 +43,32 @@ public class FadeManager : MonoBehaviour
         HideFade();
     }
 
+    private void OnEnable()
+    {
+        if (_instance != this)
+            return;
+
+        SceneManager.sceneLoaded += OnSceneLoad;
+    }
+
     private void OnDisable()
     {
         if (_instance != this)
             return;
 
+        SceneManager.sceneLoaded -= OnSceneLoad;
+
         _fadeTween?.Kill();
     }
+
+    private void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (loadSceneMode != LoadSceneMode.Single)
+            return;
+
+        HideFade();
+    }
+
 
     private void OnDestroy()
     {
