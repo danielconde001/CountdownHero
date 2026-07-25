@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider))]
 public class SceneLoadTrigger : MonoBehaviour
@@ -27,7 +26,7 @@ public class SceneLoadTrigger : MonoBehaviour
         if (other.gameObject.tag != _playerTag)
             return;
 
-        FadeManager.ShowFade(() => SceneManager.LoadScene(_sceneToLoad.sceneName));
+        FadeManager.ShowFade(() => _sceneToLoad.Load());
     }
 
 

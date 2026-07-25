@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,8 +13,9 @@ public class SceneField
 #endif
 
     [HideInInspector][SerializeField] private string _sceneName;
-    public string sceneName => _sceneName;
-
 
     public static implicit operator string(SceneField sceneField) => sceneField._sceneName;
+
+
+    public void Load() => SceneManager.LoadScene(_sceneName);
 }
