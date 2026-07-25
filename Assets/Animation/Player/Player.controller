@@ -325,9 +325,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Player Idle
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: Player Moving
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4791746729859131114}
   m_Solo: 0
@@ -500,7 +497,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: Player Die
+  - m_Name: Player Death
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -560,7 +557,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Player Die
+    m_ConditionEvent: Player Death
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 360142136302733241}

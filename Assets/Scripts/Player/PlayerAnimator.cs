@@ -19,6 +19,7 @@ public class PlayerAnimator : MonoBehaviour
 
     public void PlayAnimationTrigger(string triggerName)
     {
+        playerIdleFeedback.StopFeedbacks();
         playerAnimator.SetTrigger(triggerName);
     }
 
@@ -81,6 +82,11 @@ public class PlayerAnimator : MonoBehaviour
                 playerRunningFeedback.StopFeedbacks();
                 playerAnimator.SetBool("Player Moving", false);
                 isMoving = false;
+            }
+
+            if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Player Idle") == true && playerIdleFeedback.IsPlaying == false)
+            {
+                playerIdleFeedback.PlayFeedbacks();
             }
         }
     }

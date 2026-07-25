@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Training Enemy Battle Profile
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBattleProfile
   displayName: Training Enemy
-  maxHealth: 6
+  maxHealth: 1
   attacks:
   - {fileID: 11400000, guid: e6689acfab0563245adb3efec2050be2, type: 2}
   - {fileID: 11400000, guid: 93b3562799f01a14994596dd455642aa, type: 2}

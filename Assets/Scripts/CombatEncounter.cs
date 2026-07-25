@@ -1,4 +1,5 @@
 using System.Collections;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +12,7 @@ public class CombatEncounter : MonoBehaviour
     private const float IntroPause = 0.5f;
     private const float ActionResultPause = 1.0f;
     private const float HealResultPause = 1.0f;
-    private const float BattleCameraHeight = 2.2f;
+    private const float BattleCameraHeight = 1.25f;
 
     [Header("Systems and battle data")]
     [SerializeField] private PrototypeCameraFollow cameraFollow;
@@ -27,11 +28,17 @@ public class CombatEncounter : MonoBehaviour
     [Header("Encounter staging")]
     [SerializeField] private Transform playerBattlePoint;
     [SerializeField] private Transform enemyBattlePoint;
+    [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform playerExitPoint;
     [SerializeField] private TextMesh encounterLabel;
     [SerializeField] private TextMesh healthLabel;
     [Min(0.01f)]
     [SerializeField] private float transitionDuration = 0.55f;
+    [SerializeField] private float attackDuration;
+
+    [Header("Feedback")]
+    [SerializeField] private MMF_Player battleStartFeedback;
+    [SerializeField] private MMF_Player battleEndFeedback;
 
     private bool hasStarted;
     private CombatantAttack previousEnemyAttack;
@@ -92,6 +99,7 @@ public class CombatEncounter : MonoBehaviour
         Vector3 battleCenter = (playerBattlePoint.position + enemyBattlePoint.position) * 0.5f;
         battleCenter.y += BattleCameraHeight;
         cameraFollow.EnterBattleView(battleCenter);
+        battleStartFeedback.PlayFeedbacks();
 
         encounterLabel.gameObject.SetActive(true);
         healthLabel.gameObject.SetActive(true);
@@ -120,7 +128,7 @@ public class CombatEncounter : MonoBehaviour
         }
         yield return new WaitForSeconds(ActionResultPause);
 
-        yield return MoveTransform(playerController2D.transform, playerExitPoint.position, 0.35f);
+        battleEndFeedback.PlayFeedbacks();
         encounterLabel.gameObject.SetActive(false);
         healthLabel.gameObject.SetActive(false);
         cameraFollow.ExitBattleView();
@@ -166,6 +174,8 @@ public class CombatEncounter : MonoBehaviour
                     strike.CountdownPattern,
                     result => defenseJudgement = result);
                 
+                StartCoroutine(MoveToAttackPositionAndGoBack(enemy));
+
                 switch(defenseJudgement)
                 {
                     case TimingJudgement.TooEarly:
@@ -259,11 +269,22 @@ public class CombatEncounter : MonoBehaviour
                 strike.CountdownPattern,
                 result => judgement = result);
 
+            StartCoroutine(MoveToAttackPositionAndGoBack(playerController2D.transform));
             playerAnimator.PlayAnimationTrigger("Player Attacking");
             int damage = GetAttackDamage(judgement, strike.Damage);
             enemyCombatant.TakeDamage(damage);
             encounterLabel.text = FormatResult(judgement, damage, "DAMAGE");
             UpdateHealthDisplay();
+
+            if(enemyCombatant.IsDefeated == true)
+            {
+                StartCoroutine(MoveToAttackPositionAndStay(playerController2D.transform));
+            }
+            else
+            {
+                StartCoroutine(MoveToAttackPositionAndGoBack(playerController2D.transform));
+            }
+
             yield return WaitAfterStrike(strike);
 
             if (enemyCombatant.IsDefeated)
@@ -403,6 +424,52 @@ public class CombatEncounter : MonoBehaviour
 
         player.position = playerBattlePoint.position;
         enemy.position = enemyBattlePoint.position;
+    }
+
+    private IEnumerator MoveToAttackPositionAndGoBack(Transform target)
+    {
+        Vector3 targetStart = target.position;
+        float elapsed = 0f;
+
+        while (elapsed < attackDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.SmoothStep(0f, 1f, elapsed / attackDuration);
+            target.position = Vector3.Lerp(targetStart, attackPoint.position, progress);
+            yield return null;
+        }
+
+        target.position = attackPoint.position;
+
+        yield return new WaitForSeconds(ActionResultPause);
+
+        elapsed = 0f;
+
+        while (elapsed < attackDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.SmoothStep(0f, 1f, elapsed / attackDuration);
+            target.position = Vector3.Lerp(attackPoint.position, targetStart, progress);
+            yield return null;
+        }      
+
+        target.position = targetStart;
+    }
+
+    private IEnumerator MoveToAttackPositionAndStay(Transform target)
+    {
+        Vector3 targetStart = target.position;
+        float elapsed = 0f;
+
+        while (elapsed < attackDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.SmoothStep(0f, 1f, elapsed / attackDuration);
+            target.position = Vector3.Lerp(targetStart, attackPoint.position, progress);
+            yield return null;
+        }
+
+        target.position = attackPoint.position;
     }
 
     private static IEnumerator MoveTransform(Transform target, Vector3 destination, float duration)

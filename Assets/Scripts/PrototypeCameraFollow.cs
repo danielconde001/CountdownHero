@@ -74,6 +74,11 @@ public class PrototypeCameraFollow : MonoBehaviour
         useBattleFocus = true;
     }
 
+    public void ChangeBattleViewFocus(Vector3 focus)
+    {
+        if(useBattleFocus == true) battleFocus = focus;
+    }
+
     public void ExitBattleView()
     {
         useBattleFocus = false;
