@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -50,9 +51,11 @@ public class TimedPlatform : SwitchTarget
     private Renderer[] platformRenderers;
     private Collider2D[] platformColliders;
     private Renderer countdownRenderer;
+    private readonly List<Rigidbody2D> invalidPassengers = new List<Rigidbody2D>();
     private Vector3 originalPosition;
     private Quaternion originalRotation;
     private Vector3 originalScale;
+    private readonly HashSet<Rigidbody2D> passengers = new HashSet<Rigidbody2D>();
 
     private void Awake()
     {
@@ -85,6 +88,7 @@ public class TimedPlatform : SwitchTarget
         }
 
         isSequenceRunning = false;
+        passengers.Clear();
         ClearCountdownDisplay();
     }
 
@@ -193,8 +197,8 @@ public class TimedPlatform : SwitchTarget
         Vector3 start = transform.position;
         Vector3 end = active ? moveTarget : originalPosition;
         float duration = Mathf.Max(0f, moveDuration);
-        yield return Lerp(duration, progress => transform.position = Vector3.Lerp(start, end, progress));
-        transform.position = end;
+        yield return Lerp(duration, progress => MovePlatform(Vector3.Lerp(start, end, progress)));
+        MovePlatform(end);
     }
 
     private IEnumerator RotateTween(bool active)
@@ -249,7 +253,7 @@ public class TimedPlatform : SwitchTarget
                 SetPlatformVisible(active);
                 break;
             case BehaviorMode.Move:
-                transform.position = active ? moveTarget : originalPosition;
+                MovePlatform(active ? moveTarget : originalPosition);
                 break;
             case BehaviorMode.Rotate:
                 transform.rotation = active ? Quaternion.Euler(rotateTarget) : originalRotation;
@@ -288,5 +292,85 @@ public class TimedPlatform : SwitchTarget
         {
             countdownDisplay.text = string.Empty;
         }
+    }
+
+    private void MovePlatform(Vector3 nextPosition)
+    {
+        Vector3 delta = nextPosition - transform.position;
+        transform.position = nextPosition;
+
+        if (delta == Vector3.zero)
+        {
+            return;
+        }
+
+        foreach (Rigidbody2D passenger in passengers)
+        {
+            if (passenger == null)
+            {
+                invalidPassengers.Add(passenger);
+            }
+            else
+            {
+                passenger.position += (Vector2)delta;
+            }
+        }
+
+        if (invalidPassengers.Count == 0)
+        {
+            return;
+        }
+
+        foreach (Rigidbody2D invalidPassenger in invalidPassengers)
+        {
+            passengers.Remove(invalidPassenger);
+        }
+
+        invalidPassengers.Clear();
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (mode != BehaviorMode.Move
+            || !collision.gameObject.TryGetComponent(out PlayerController2D _)
+            || !collision.gameObject.TryGetComponent(out Rigidbody2D passenger))
+        {
+            return;
+        }
+
+        if (IsStandingOnTop(collision))
+        {
+            passengers.Add(passenger);
+        }
+        else
+        {
+            passengers.Remove(passenger);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out Rigidbody2D passenger))
+        {
+            passengers.Remove(passenger);
+        }
+    }
+
+    private bool IsStandingOnTop(Collision2D collision)
+    {
+        if (collision.transform.position.y <= transform.position.y)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            if (collision.GetContact(i).normal.y < -0.5f)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
