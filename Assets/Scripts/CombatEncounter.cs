@@ -8,9 +8,9 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class CombatEncounter : MonoBehaviour
 {
-    private const float IntroPause = 0.35f;
-    private const float ActionResultPause = 0.55f;
-    private const float HealResultPause = 0.75f;
+    private const float IntroPause = 0.5f;
+    private const float ActionResultPause = 1.0f;
+    private const float HealResultPause = 1.0f;
     private const float BattleCameraHeight = 2.2f;
 
     [Header("Systems and battle data")]
@@ -35,6 +35,8 @@ public class CombatEncounter : MonoBehaviour
 
     private bool hasStarted;
     private CombatantAttack previousEnemyAttack;
+    private PlayerController2D playerController2D;
+    private PlayerAnimator playerAnimator;
 
     private enum PlayerBattleAction
     {
@@ -77,13 +79,15 @@ public class CombatEncounter : MonoBehaviour
             return;
         }
 
+        playerController2D = player;
+        playerAnimator = player.gameObject.GetComponent<PlayerAnimator>();
         hasStarted = true;
-        StartCoroutine(RunEncounter(player));
+        StartCoroutine(RunEncounter());
     }
 
-    private IEnumerator RunEncounter(PlayerController2D player)
+    private IEnumerator RunEncounter()
     {
-        player.SetControlLocked(true);
+        playerController2D.SetControlLocked(true);
 
         Vector3 battleCenter = (playerBattlePoint.position + enemyBattlePoint.position) * 0.5f;
         battleCenter.y += BattleCameraHeight;
@@ -93,7 +97,7 @@ public class CombatEncounter : MonoBehaviour
         healthLabel.gameObject.SetActive(true);
         encounterLabel.text = "ENCOUNTER!";
 
-        yield return MoveToBattlePositions(player.transform);
+        yield return MoveToBattlePositions(playerController2D.transform);
         yield return new WaitForSeconds(IntroPause);
 
         playerCombatant.ResetHealth();
@@ -106,15 +110,21 @@ public class CombatEncounter : MonoBehaviour
         encounterLabel.text = playerWon ? "VICTORY!" : "DEFEAT";
         if (playerWon)
         {
+            playerAnimator.PlayAnimationTrigger("Player Victory");
             enemy.gameObject.SetActive(false);
+        }
+        else
+        {
+            //TODO: PUT GAME OVER HERE
+            playerAnimator.PlayAnimationTrigger("Player Death");
         }
         yield return new WaitForSeconds(ActionResultPause);
 
-        yield return MoveTransform(player.transform, playerExitPoint.position, 0.35f);
+        yield return MoveTransform(playerController2D.transform, playerExitPoint.position, 0.35f);
         encounterLabel.gameObject.SetActive(false);
         healthLabel.gameObject.SetActive(false);
         cameraFollow.ExitBattleView();
-        player.SetControlLocked(false);
+        playerController2D.SetControlLocked(false);
     }
 
     private IEnumerator RunBattleLoop()
@@ -155,7 +165,32 @@ public class CombatEncounter : MonoBehaviour
                 yield return PlayCountdown(
                     strike.CountdownPattern,
                     result => defenseJudgement = result);
+                
+                switch(defenseJudgement)
+                {
+                    case TimingJudgement.TooEarly:
+                    {
+                        playerAnimator.PlayAnimationTrigger("Player Take Hit");
+                        break;
+                    }
+                    case TimingJudgement.Miss:
+                    {
+                        playerAnimator.PlayAnimationTrigger("Player Take Hit");
+                        break;
+                    }
 
+                    case TimingJudgement.Good:
+                    {
+                        playerAnimator.PlayAnimationTrigger("Player Defending");
+                        break;
+                    }
+                    case TimingJudgement.Perfect:
+                    {
+                        playerAnimator.PlayAnimationTrigger("Player Defending");
+                        break;
+                    }
+                }
+                
                 int incomingDamage = GetIncomingDamage(defenseJudgement, strike.Damage);
                 playerCombatant.TakeDamage(incomingDamage);
                 encounterLabel.text = FormatResult(
@@ -224,6 +259,7 @@ public class CombatEncounter : MonoBehaviour
                 strike.CountdownPattern,
                 result => judgement = result);
 
+            playerAnimator.PlayAnimationTrigger("Player Attacking");
             int damage = GetAttackDamage(judgement, strike.Damage);
             enemyCombatant.TakeDamage(damage);
             encounterLabel.text = FormatResult(judgement, damage, "DAMAGE");
@@ -254,6 +290,7 @@ public class CombatEncounter : MonoBehaviour
             _ => 0
         };
 
+        //TODO: ADD PLAYER HEAL ANIMATION TRIGGER HERE
         int healthBefore = playerCombatant.CurrentHealth;
         playerCombatant.Heal(healAmount);
         int restoredHealth = playerCombatant.CurrentHealth - healthBefore;
