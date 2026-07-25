@@ -32,6 +32,7 @@ public class TimedGeyser : SwitchTarget
     private void Awake()
     {
         GetComponent<Collider2D>().isTrigger = true;
+        TextMeshFontUtility.ApplyFontMaterial(countdownDisplay);
         ResetState();
     }
 

@@ -66,6 +66,7 @@ public class TimedPlatform : SwitchTarget
         countdownRenderer = countdownDisplay != null
             ? countdownDisplay.GetComponent<Renderer>()
             : null;
+        TextMeshFontUtility.ApplyFontMaterial(countdownDisplay);
         originalPosition = transform.position;
         originalRotation = transform.rotation;
         originalScale = transform.localScale;

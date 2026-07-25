@@ -96,6 +96,8 @@ public class CombatEncounter : MonoBehaviour
     private IEnumerator RunEncounter()
     {
         playerController2D.SetControlLocked(true);
+        TextMeshFontUtility.ApplyFontMaterial(encounterLabel);
+        TextMeshFontUtility.ApplyFontMaterial(healthLabel);
 
         // Vector3 battleCenter = (playerBattlePoint.position + enemyBattlePoint.position) * 0.5f;
         // battleCenter.y += BattleCameraHeight;

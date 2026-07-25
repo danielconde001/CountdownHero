@@ -710,7 +710,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145012089}
-  m_Text: 
+  m_Text:
   m_OffsetZ: 0
   m_CharacterSize: 0.18
   m_LineSpacing: 1
@@ -720,7 +720,7 @@ TextMesh:
   m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 0}
+  m_Font: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4282443519
@@ -841,7 +841,7 @@ TextMesh:
   m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 0}
+  m_Font: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294963424
@@ -1028,7 +1028,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65ce917646fa4c76905c694106a5b599, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::TimedSwitch
   mode: 1
   targets:
@@ -1038,11 +1038,20 @@ MonoBehaviour:
   promptVisual: 1
   interactPromptOffset: {x: 0, y: 1.25, z: 0}
   interactPromptText: E
+  interactPromptFont: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   interactPromptFontSize: 0.35
   interactPromptImage: {fileID: 21300000, guid: 77c1ee0a28fe9774c85bd5ff52aef417, type: 3}
   interactPromptImageScale: {x: 1, y: 1, z: 1}
   interactPromptImageColor: {r: 1, g: 1, b: 1, a: 1}
   interactPromptImageSortingOrder: 10
+  promptShowDuration: 0.25
+  promptShowEase: 5
+  promptStartScale: 0.5
+  promptStartRotation: 10
+  promptPopDuration: 0.12
+  promptPopScale: 1.25
+  promptPressedColor: {r: 1, g: 0.85, b: 0.1, a: 1}
+  promptDisappearDuration: 0.18
 --- !u!61 &342656497
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1132,7 +1141,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 520cce614e0c4ff9a671c9cae26e52ca, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::CombatEncounterTrigger
   encounter: {fileID: 1140011923}
 --- !u!61 &369554269
@@ -1913,7 +1922,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 587276989}
-  m_Text: 
+  m_Text:
   m_OffsetZ: 0
   m_CharacterSize: 0.1
   m_LineSpacing: 1
@@ -1923,7 +1932,7 @@ TextMesh:
   m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 0}
+  m_Font: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4283295487
@@ -2096,7 +2105,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671677527}
-  m_Text: 
+  m_Text:
   m_OffsetZ: 0
   m_CharacterSize: 0.18
   m_LineSpacing: 1
@@ -2106,7 +2115,7 @@ TextMesh:
   m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 0}
+  m_Font: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4282443519
@@ -3350,7 +3359,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e197651920f94c3d99a2608f399474a7, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::CombatEncounter
   cameraFollow: {fileID: 1637049768}
   countdown: {fileID: 1140011924}
@@ -3375,7 +3384,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7373a6dad69456e86519fd1a4a9e076, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::CountdownSequenceRunner
 --- !u!4 &1140011925
 Transform:
@@ -3471,96 +3480,6 @@ Transform:
   - {fileID: 116965187}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1147427408
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1147427409}
-  - component: {fileID: 1147427411}
-  - component: {fileID: 1147427410}
-  m_Layer: 0
-  m_Name: Switch Body
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1147427409
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147427408}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.65, y: 0.25, z: 1.2}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1437618440}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &1147427410
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147427408}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: d77c9e6f084125b44944e419dc613b60, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_MaskInteraction: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1147427411
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147427408}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1166933746
 GameObject:
   m_ObjectHideFlags: 0
@@ -3942,7 +3861,7 @@ Transform:
   - {fileID: 749665443}
   - {fileID: 1429719364}
   - {fileID: 1678309504}
-  - {fileID: 1437618440}
+  - {fileID: 1529091863}
   - {fileID: 1796655904}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4051,7 +3970,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1298557748}
-  m_Text: 
+  m_Text:
   m_OffsetZ: 0
   m_CharacterSize: 0.065
   m_LineSpacing: 1
@@ -4061,7 +3980,7 @@ TextMesh:
   m_FontSize: 54
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 0}
+  m_Font: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294963929
@@ -4378,7 +4297,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -4515,7 +4434,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe442fee9a4b4c0688c43b2413a706ff, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::TimedPlatform
   countdownDuration: 1.5
   activeDuration: 4
@@ -4597,111 +4516,6 @@ Transform:
   - {fileID: 145012092}
   m_Father: {fileID: 1270013808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1437618439
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1437618440}
-  - component: {fileID: 1437618442}
-  - component: {fileID: 1437618441}
-  m_Layer: 0
-  m_Name: Countdown Switch
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1437618440
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1437618439}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 30.8, y: -1.75, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1147427409}
-  m_Father: {fileID: 1270013808}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1437618441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1437618439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65ce917646fa4c76905c694106a5b599, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TimedSwitch
-  mode: 1
-  targets:
-  - {fileID: 1429719362}
-  cooldown: 0.5
-  interactPrompt: {fileID: 0}
-  promptVisual: 1
-  interactPromptOffset: {x: 0, y: 1.25, z: 0}
-  interactPromptText: E
-  interactPromptFontSize: 0.35
-  interactPromptImage: {fileID: 21300000, guid: 77c1ee0a28fe9774c85bd5ff52aef417, type: 3}
-  interactPromptImageScale: {x: 1, y: 1, z: 1}
-  interactPromptImageColor: {r: 1, g: 1, b: 1, a: 1}
-  interactPromptImageSortingOrder: 10
---- !u!61 &1437618442
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1437618439}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.9, y: 1.2}
-  m_EdgeRadius: 0
 --- !u!1 &1440946283
 GameObject:
   m_ObjectHideFlags: 0
@@ -4871,6 +4685,100 @@ Transform:
   - {fileID: 1210540739}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1529091862
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1270013808}
+    m_Modifications:
+    - target: {fileID: 100000, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_Name
+      value: Countdown Lever Switch (Blue)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 30.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: targets.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: promptPressedColor.b
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: promptPressedColor.g
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: promptPressedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: 'targets.Array.data[0]'
+      value:
+      objectReference: {fileID: 1429719362}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: interactPromptImageScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: interactPromptImageScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+      propertyPath: interactPromptImageScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+--- !u!4 &1529091863 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 100001, guid: e04f3c75cc1d4f3da850782b018dbb16, type: 3}
+  m_PrefabInstance: {fileID: 1529091862}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1533482608
 GameObject:
   m_ObjectHideFlags: 0
@@ -5256,7 +5164,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 349bb49d31c94a82a59d6b580a539f69, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::PrototypeCameraFollow
   target: {fileID: 92732108}
   offset: {x: 2, y: 3.5, z: -15}
@@ -5264,6 +5172,8 @@ MonoBehaviour:
   horizontalBounds: {x: -6.5, y: 50}
   verticalBounds: {x: -10, y: 7}
   verticalDeadZone: 1.25
+  startingMode: 0
+  startingFixedPosition: {x: 0, y: 0}
 --- !u!114 &1637049769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5274,7 +5184,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
@@ -5337,7 +5247,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b40b33f9d4045eeb59403b5d7a6aae6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BattleCombatant
   maxHealth: 6
 --- !u!23 &1649311908
@@ -5794,7 +5704,7 @@ TextMesh:
   m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 0}
+  m_Font: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294963424
@@ -5965,12 +5875,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab9991812f7c430ba32785d6e41b6447, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::TimedGeyser
   countdownDuration: 1.5
   activeDuration: 4
-  acceleration: 55
-  maximumSpeed: 18
+  launchSpeed: 18
   activeVisual: {fileID: 2044037599}
   countdownDisplay: {fileID: 671677528}
   onActivated:
@@ -6678,7 +6587,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4b40b33f9d4045eeb59403b5d7a6aae6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BattleCombatant
   maxHealth: 6
 --- !u!1660057539 &9223372036854775807
