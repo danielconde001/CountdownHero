@@ -54,6 +54,11 @@ public class PrototypeCameraFollow : MonoBehaviour
 
     private void Awake()
     {
+        if (target == null)
+        {
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
         basePlatformingMode = startingMode;
         baseFixedPosition = startingFixedPosition;
     }

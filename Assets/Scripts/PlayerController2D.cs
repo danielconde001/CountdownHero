@@ -95,6 +95,8 @@ public class PlayerController2D : MonoBehaviour
     private Vector2 ledgeClimbStart;
     private Vector2 ledgeClimbTarget;
     private Vector2 ledgeHangTarget;
+    private Transform ledgeAnchorTransform;
+    private Vector3 ledgeAnchorLastPosition;
     private float ledgeDirection;
     private float ledgeCooldownTimer;
     private bool dropRequested;
@@ -162,6 +164,7 @@ public class PlayerController2D : MonoBehaviour
 
         IsLedgeClimbing = false;
         IsWallSliding = false;
+        ledgeAnchorTransform = null;
         pendingExternalAcceleration = Vector2.zero;
     }
 
@@ -416,6 +419,10 @@ public class PlayerController2D : MonoBehaviour
             wall.point.x - direction * (bounds.extents.x + hangGap),
             ledgeTop - bounds.size.y * hangingBodyDropRatio);
         ledgeClimbTarget = standingTarget;
+        ledgeAnchorTransform = GetLedgeAnchorTransform(top.collider);
+        ledgeAnchorLastPosition = ledgeAnchorTransform != null
+            ? ledgeAnchorTransform.position
+            : Vector3.zero;
         ledgeState = LedgeState.Hanging;
         IsLedgeClimbing = true;
         dropRequested = false;
@@ -429,6 +436,7 @@ public class PlayerController2D : MonoBehaviour
     {
         // Hold the rigidbody at a stable anchor before the automatic pull-up.
         rb.linearVelocity = Vector2.zero;
+        SyncLedgeAnchorMotion();
         rb.MovePosition(ledgeHangTarget);
         ledgeClimbTimer += Time.fixedDeltaTime;
 
@@ -453,6 +461,7 @@ public class PlayerController2D : MonoBehaviour
     {
         // Smoothstep gives the placeholder climb a soft start and finish.
         ledgeClimbTimer += Time.fixedDeltaTime;
+        SyncLedgeAnchorMotion();
         float progress = Mathf.Clamp01(ledgeClimbTimer / ledgeClimbDuration);
         float easedProgress = progress * progress * (3f - 2f * progress);
         rb.MovePosition(Vector2.Lerp(ledgeClimbStart, ledgeClimbTarget, easedProgress));
@@ -483,6 +492,42 @@ public class PlayerController2D : MonoBehaviour
         ledgeState = LedgeState.Cooldown;
         ledgeCooldownTimer = regrabCooldown;
         IsLedgeClimbing = false;
+        ledgeAnchorTransform = null;
+    }
+
+    private Transform GetLedgeAnchorTransform(Collider2D ledgeCollider)
+    {
+        if (ledgeCollider == null)
+        {
+            return null;
+        }
+
+        TimedPlatform timedPlatform = ledgeCollider.GetComponentInParent<TimedPlatform>();
+        return timedPlatform != null ? timedPlatform.transform : ledgeCollider.transform;
+    }
+
+    private void SyncLedgeAnchorMotion()
+    {
+        if (ledgeAnchorTransform == null)
+        {
+            return;
+        }
+
+        Vector3 currentPosition = ledgeAnchorTransform.position;
+        Vector2 delta = currentPosition - ledgeAnchorLastPosition;
+        ledgeAnchorLastPosition = currentPosition;
+
+        if (delta == Vector2.zero)
+        {
+            return;
+        }
+
+        // Hang and climb targets are captured in world space. When the grabbed
+        // platform moves, shift those targets by the same delta so the player
+        // stays attached to the ledge instead of hovering at the old location.
+        ledgeHangTarget += delta;
+        ledgeClimbStart += delta;
+        ledgeClimbTarget += delta;
     }
 
     private RaycastHit2D FirstExternalHit(int hitCount)
@@ -548,6 +593,7 @@ public class PlayerController2D : MonoBehaviour
         {
             ledgeState = LedgeState.None;
             IsLedgeClimbing = false;
+            ledgeAnchorTransform = null;
             bodyCollider.enabled = true;
             rb.linearVelocity = Vector2.zero;
             rb.bodyType = RigidbodyType2D.Kinematic;
