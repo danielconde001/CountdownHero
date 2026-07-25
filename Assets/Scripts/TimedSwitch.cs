@@ -34,6 +34,7 @@ public class TimedSwitch : MonoBehaviour
 
     [Header("Text Prompt")]
     [SerializeField] private string interactPromptText = "E";
+    [SerializeField] private Font interactPromptFont;
     [SerializeField, Min(0.1f)] private float interactPromptFontSize = 0.35f;
 
     [Header("Image Prompt")]
@@ -56,8 +57,10 @@ public class TimedSwitch : MonoBehaviour
 
     private bool isOnCooldown;
     private bool playerInRange;
+    private bool isPromptHideAnimating;
     private bool isPromptPressAnimating;
     private Collider2D switchCollider;
+    private CubeLeverVisual cubeLeverVisual;
     private Coroutine cooldownRoutine;
     private SpriteRenderer promptImageRenderer;
     private Sequence promptAnimationSequence;
@@ -75,8 +78,10 @@ public class TimedSwitch : MonoBehaviour
         }
 
         ConfigureCollider();
+        cubeLeverVisual = GetComponent<CubeLeverVisual>();
         EnsureInteractPrompt();
         CachePromptAnimationState();
+        RefreshCubeLeverVisual(true);
         RefreshInteractPrompt();
     }
 
@@ -91,11 +96,17 @@ public class TimedSwitch : MonoBehaviour
         isOnCooldown = false;
         playerInRange = false;
         KillPromptAnimation();
-        SetInteractPromptVisible(false);
+
+        if (interactPrompt != null)
+        {
+            interactPrompt.SetActive(false);
+            RestorePromptVisibleState();
+        }
     }
 
     private void Update()
     {
+        RefreshCubeLeverVisual();
         RefreshInteractPrompt();
 
         if (mode != ActivationMode.OnInteractPress
@@ -224,6 +235,7 @@ public class TimedSwitch : MonoBehaviour
             }
         }
 
+        RefreshCubeLeverVisual();
         RefreshInteractPrompt();
 
         float duration = Mathf.Max(0f, cooldown);
@@ -240,6 +252,7 @@ public class TimedSwitch : MonoBehaviour
         yield return new WaitForSeconds(duration);
         isOnCooldown = false;
         cooldownRoutine = null;
+        RefreshCubeLeverVisual();
         RefreshInteractPrompt();
     }
 
@@ -266,20 +279,25 @@ public class TimedSwitch : MonoBehaviour
     private void SetInteractPromptVisible(bool visible)
     {
         if (interactPrompt == null
-            || (!visible && isPromptPressAnimating)
-            || interactPrompt.activeSelf == visible)
+            || (!visible && isPromptPressAnimating))
         {
             return;
         }
 
         if (visible)
         {
-            PlayPromptShowAnimation();
+            if (!interactPrompt.activeSelf || isPromptHideAnimating)
+            {
+                PlayPromptShowAnimation(!isPromptHideAnimating);
+            }
+
             return;
         }
 
-        KillPromptAnimation();
-        interactPrompt.SetActive(false);
+        if (interactPrompt.activeSelf && !isPromptHideAnimating)
+        {
+            PlayPromptHideAnimation();
+        }
     }
 
     private void EnsureInteractPrompt()
@@ -312,14 +330,24 @@ public class TimedSwitch : MonoBehaviour
             promptObject.transform.localScale = Vector3.one;
             TextMesh promptText = promptObject.AddComponent<TextMesh>();
             promptText.text = interactPromptText;
+            promptText.font = interactPromptFont;
             promptText.anchor = TextAnchor.MiddleCenter;
             promptText.alignment = TextAlignment.Center;
             promptText.fontSize = 24;
             promptText.characterSize = interactPromptFontSize;
             promptText.color = Color.white;
+            TextMeshFontUtility.ApplyFontMaterial(promptText);
         }
 
         interactPrompt = promptObject;
+    }
+
+    private void RefreshCubeLeverVisual(bool instant = false)
+    {
+        if (cubeLeverVisual != null)
+        {
+            cubeLeverVisual.SetEngaged(isOnCooldown || IsAnyTargetRunning(), instant);
+        }
     }
 
     private void CachePromptAnimationState()
@@ -337,20 +365,23 @@ public class TimedSwitch : MonoBehaviour
             : Color.white;
     }
 
-    private void PlayPromptShowAnimation()
+    private void PlayPromptShowAnimation(bool restartFromHidden = true)
     {
         KillPromptAnimation();
 
         Transform promptTransform = interactPrompt.transform;
-        promptTransform.localScale = promptVisibleScale * promptStartScale;
-        promptTransform.localRotation = promptVisibleRotation
-            * Quaternion.Euler(0f, 0f, promptStartRotation);
-
-        if (promptImageRenderer != null)
+        if (restartFromHidden)
         {
-            Color transparentColor = promptVisibleColor;
-            transparentColor.a = 0f;
-            promptImageRenderer.color = transparentColor;
+            promptTransform.localScale = promptVisibleScale * promptStartScale;
+            promptTransform.localRotation = promptVisibleRotation
+                * Quaternion.Euler(0f, 0f, promptStartRotation);
+
+            if (promptImageRenderer != null)
+            {
+                Color transparentColor = promptVisibleColor;
+                transparentColor.a = 0f;
+                promptImageRenderer.color = transparentColor;
+            }
         }
 
         interactPrompt.SetActive(true);
@@ -380,6 +411,49 @@ public class TimedSwitch : MonoBehaviour
         promptAnimationSequence
             .SetTarget(interactPrompt)
             .OnComplete(() => promptAnimationSequence = null);
+    }
+
+    private void PlayPromptHideAnimation()
+    {
+        KillPromptAnimation();
+        isPromptHideAnimating = true;
+
+        Transform promptTransform = interactPrompt.transform;
+        float duration = Mathf.Max(0f, promptShowDuration);
+        if (duration <= 0f)
+        {
+            CompletePromptHideAnimation();
+            return;
+        }
+
+        promptAnimationSequence = DOTween.Sequence();
+        promptAnimationSequence.Join(
+            promptTransform.DOScale(promptVisibleScale * promptStartScale, duration)
+                .SetEase(promptShowEase));
+        promptAnimationSequence.Join(
+            promptTransform.DOLocalRotateQuaternion(
+                    promptVisibleRotation * Quaternion.Euler(0f, 0f, promptStartRotation),
+                    duration)
+                .SetEase(promptShowEase));
+
+        if (promptImageRenderer != null)
+        {
+            promptAnimationSequence.Join(
+                promptImageRenderer.DOFade(0f, duration)
+                    .SetEase(promptShowEase));
+        }
+
+        promptAnimationSequence
+            .SetTarget(interactPrompt)
+            .OnComplete(CompletePromptHideAnimation);
+    }
+
+    private void CompletePromptHideAnimation()
+    {
+        promptAnimationSequence = null;
+        isPromptHideAnimating = false;
+        interactPrompt.SetActive(false);
+        RestorePromptVisibleState();
     }
 
     private void PlayPromptPressAnimation()
@@ -435,6 +509,7 @@ public class TimedSwitch : MonoBehaviour
 
     private void KillPromptAnimation()
     {
+        isPromptHideAnimating = false;
         isPromptPressAnimating = false;
 
         if (promptAnimationSequence == null)

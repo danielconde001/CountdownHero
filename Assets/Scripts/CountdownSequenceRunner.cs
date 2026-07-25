@@ -29,6 +29,7 @@ public class CountdownSequenceRunner : MonoBehaviour
             yield break;
         }
 
+        TextMeshFontUtility.ApplyFontMaterial(display);
         yield return WaitForActionRelease();
 
         foreach (CountdownBeat beat in pattern.Beats)
@@ -88,5 +89,26 @@ public class CountdownSequenceRunner : MonoBehaviour
         bool spaceHeld = Keyboard.current != null && Keyboard.current.spaceKey.isPressed;
         bool mouseHeld = Mouse.current != null && Mouse.current.leftButton.isPressed;
         return spaceHeld || mouseHeld;
+    }
+}
+
+/// <summary>
+/// Keeps legacy TextMesh renderers visible after assigning a custom font.
+/// TextMesh does not always swap its renderer material automatically.
+/// </summary>
+public static class TextMeshFontUtility
+{
+    public static void ApplyFontMaterial(TextMesh textMesh)
+    {
+        if (textMesh == null || textMesh.font == null)
+        {
+            return;
+        }
+
+        Renderer textRenderer = textMesh.GetComponent<Renderer>();
+        if (textRenderer != null)
+        {
+            textRenderer.sharedMaterial = textMesh.font.material;
+        }
     }
 }
