@@ -304,6 +304,8 @@ public class TimedPlatform : SwitchTarget
             return;
         }
 
+        // The platform moves by transform, so riders need the same position delta
+        // applied to their Rigidbody2D or they will be left behind.
         foreach (Rigidbody2D passenger in passengers)
         {
             if (passenger == null)
@@ -316,6 +318,8 @@ public class TimedPlatform : SwitchTarget
             }
         }
 
+        // Unity can destroy objects between collision callbacks; prune stale
+        // entries outside the main loop so the HashSet is not modified mid-iteration.
         if (invalidPassengers.Count == 0)
         {
             return;
@@ -331,6 +335,8 @@ public class TimedPlatform : SwitchTarget
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        // Only carry the player when they are riding the top face. Side contacts
+        // should not glue the player to a moving platform.
         if (mode != BehaviorMode.Move
             || !collision.gameObject.TryGetComponent(out PlayerController2D _)
             || !collision.gameObject.TryGetComponent(out Rigidbody2D passenger))
