@@ -1351,6 +1351,9 @@ MonoBehaviour:
   - {fileID: 1926693773}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
+  interactPromptText: Press E
+  interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptFontSize: 0.35
 --- !u!61 &907172909
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2496,6 +2499,9 @@ MonoBehaviour:
   - {fileID: 1677019025}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
+  interactPromptText: Press E
+  interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptFontSize: 0.35
 --- !u!61 &1745655984
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2695,7 +2701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimedPlatform
   countdownDuration: 3
-  activeDuration: 1.5
+  activeDuration: 3
   startActive: 0
   mode: 2
   moveTarget: {x: 0, y: 0, z: 0}

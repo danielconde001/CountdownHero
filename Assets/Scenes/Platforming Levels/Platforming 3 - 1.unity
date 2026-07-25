@@ -2471,6 +2471,9 @@ MonoBehaviour:
   - {fileID: 1926693773}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
+  interactPromptText: Press E
+  interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptFontSize: 0.35
 --- !u!61 &907172909
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3441,7 +3444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimedPlatform
   countdownDuration: 3
-  activeDuration: 1
+  activeDuration: 3
   startActive: 0
   mode: 0
   moveTarget: {x: 0, y: 0, z: 0}
@@ -3948,7 +3951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimedPlatform
   countdownDuration: 3
-  activeDuration: 1
+  activeDuration: 1.5
   startActive: 0
   mode: 1
   moveTarget: {x: 13, y: -0.5, z: 0}
@@ -4019,7 +4022,7 @@ Transform:
   m_GameObject: {fileID: 1677019024}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13, y: 6.5, z: 0}
+  m_LocalPosition: {x: 13.5, y: 6.5, z: 0}
   m_LocalScale: {x: 2.9, y: 0.55, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4215,6 +4218,9 @@ MonoBehaviour:
   - {fileID: 1677019025}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
+  interactPromptText: Press E
+  interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptFontSize: 0.35
 --- !u!61 &1745655984
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4369,6 +4375,9 @@ MonoBehaviour:
   - {fileID: 1406003446}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
+  interactPromptText: Press E
+  interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptFontSize: 0.35
 --- !u!61 &1820840045
 BoxCollider2D:
   m_ObjectHideFlags: 0
