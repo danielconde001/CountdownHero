@@ -21,8 +21,6 @@ public abstract class InputPromptDisplay : MonoBehaviour
                 EditorUtility.SetDirty(this);
         }
         #endif
-
-        ApplySprite();
     }
 
     protected void OnEnable()
@@ -42,7 +40,7 @@ public abstract class InputPromptDisplay : MonoBehaviour
     protected abstract void ApplySprite();
 
 
-    protected Sprite GetSprite()
+    protected Sprite GetActionSprite()
     {
         if (_database == null)
         {
@@ -73,14 +71,17 @@ public abstract class InputPromptDisplay : MonoBehaviour
             if (binding.effectivePath == null)
                 continue;
 
-            if (Application.isPlaying && Gamepad.current != null && InputControlPath.Matches(binding.effectivePath, Gamepad.current))
-                return i;
-            else 
+            if (Application.isPlaying && Gamepad.current != null)
             {
-                if (InputControlPath.Matches(binding.effectivePath, Mouse.current))
+                if (InputControlPath.Matches(binding.effectivePath, Gamepad.current))
                     return i;
-
-                if (InputControlPath.Matches(binding.effectivePath, Keyboard.current))
+                else
+                    continue;
+            }
+            else
+            {
+                if (InputControlPath.Matches(binding.effectivePath, Keyboard.current)
+                    || InputControlPath.Matches(binding.effectivePath, Mouse.current))
                     return i;
             }
         }

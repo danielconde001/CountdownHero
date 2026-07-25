@@ -12,5 +12,5 @@ public class InputPromptDisplayRenderer : InputPromptDisplay
         base.OnValidate();
     }
 
-    protected override void ApplySprite() => _spriteRenderer.sprite = GetSprite();
+    protected override void ApplySprite() => _spriteRenderer.sprite = GetActionSprite();
 }

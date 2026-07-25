@@ -48,7 +48,7 @@ MonoBehaviour:
     xbox: {fileID: 21300000, guid: a8c69a3a0860f8e4c8e07a1cddc1bd35, type: 3}
     playStation: {fileID: 21300000, guid: 02579675dd8069f42a3a92799c00f235, type: 3}
     nintendo: {fileID: 21300000, guid: a7f6e5caa512b4348acc1286889f1ec4, type: 3}
-  - controlPath: <Gamepad>/buttonEast
+  - controlPath: <Gamepad>/buttonWest
     generic: {fileID: 21300000, guid: 368f3cf88cfa6194b890999fb15ae0fb, type: 3}
     xbox: {fileID: 21300000, guid: 368f3cf88cfa6194b890999fb15ae0fb, type: 3}
     playStation: {fileID: 21300000, guid: 79a059391d4149e4dad35ab6cffdca41, type: 3}

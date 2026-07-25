@@ -38,7 +38,7 @@ public class TimedSwitch : MonoBehaviour
     [SerializeField, Min(0.1f)] private float interactPromptFontSize = 0.35f;
 
     [Header("Image Prompt")]
-    [SerializeField] private Sprite interactPromptImage;
+    [SerializeField] private SpriteRenderer interactPromptPrefab;
     [SerializeField] private Vector3 interactPromptImageScale = Vector3.one;
     [SerializeField] private Color interactPromptImageColor = Color.white;
     [SerializeField] private int interactPromptImageSortingOrder = 10;
@@ -307,7 +307,14 @@ public class TimedSwitch : MonoBehaviour
             return;
         }
 
-        var promptObject = new GameObject("Interact Prompt");
+        if (interactPromptPrefab == null && promptVisual == PromptVisual.Image)
+        {
+            promptVisual = PromptVisual.Text;
+
+            Debug.LogWarning("No Interact Prompt Prefab Set switching to Text");
+        }
+
+        var promptObject = (promptVisual == PromptVisual.Image) ? Instantiate(interactPromptPrefab).gameObject : new GameObject("Interact Prompt");
         promptObject.transform.SetParent(transform);
         promptObject.transform.localPosition = interactPromptOffset;
         promptObject.transform.localRotation = Quaternion.identity;
@@ -315,15 +322,9 @@ public class TimedSwitch : MonoBehaviour
         if (promptVisual == PromptVisual.Image)
         {
             promptObject.transform.localScale = interactPromptImageScale;
-            SpriteRenderer promptImage = promptObject.AddComponent<SpriteRenderer>();
-            promptImage.sprite = interactPromptImage;
+            SpriteRenderer promptImage = promptObject.GetComponent<SpriteRenderer>();
             promptImage.color = interactPromptImageColor;
             promptImage.sortingOrder = interactPromptImageSortingOrder;
-
-            if (interactPromptImage == null)
-            {
-                Debug.LogWarning($"{name}: Image prompt selected, but no prompt Sprite is assigned.");
-            }
         }
         else
         {
@@ -340,6 +341,7 @@ public class TimedSwitch : MonoBehaviour
         }
 
         interactPrompt = promptObject;
+        interactPrompt.SetActive(false);
     }
 
     private void RefreshCubeLeverVisual(bool instant = false)
