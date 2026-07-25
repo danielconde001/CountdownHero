@@ -29,7 +29,7 @@ public class CombatEncounter : MonoBehaviour
     [SerializeField] private Transform playerBattlePoint;
     [SerializeField] private Transform enemyBattlePoint;
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private Transform playerExitPoint;
+    [SerializeField] private Transform cameraPoint;
     [SerializeField] private TextMesh encounterLabel;
     [SerializeField] private TextMesh healthLabel;
     [Min(0.01f)]
@@ -38,6 +38,8 @@ public class CombatEncounter : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private MMF_Player battleStartFeedback;
+    [SerializeField] private MMF_Player battleBeforeAttackFeedback;
+    [SerializeField] private MMF_Player battleAttackFeedback;
     [SerializeField] private MMF_Player battleEndFeedback;
 
     private bool hasStarted;
@@ -74,7 +76,6 @@ public class CombatEncounter : MonoBehaviour
         enemy = enemyTransform;
         playerBattlePoint = playerPoint;
         enemyBattlePoint = enemyPoint;
-        playerExitPoint = exitPoint;
         encounterLabel = label;
         healthLabel = healthDisplay;
     }
@@ -96,9 +97,9 @@ public class CombatEncounter : MonoBehaviour
     {
         playerController2D.SetControlLocked(true);
 
-        Vector3 battleCenter = (playerBattlePoint.position + enemyBattlePoint.position) * 0.5f;
-        battleCenter.y += BattleCameraHeight;
-        cameraFollow.EnterBattleView(battleCenter);
+        // Vector3 battleCenter = (playerBattlePoint.position + enemyBattlePoint.position) * 0.5f;
+        // battleCenter.y += BattleCameraHeight;
+        cameraFollow.EnterBattleView(cameraPoint);
         battleStartFeedback.PlayFeedbacks();
 
         encounterLabel.gameObject.SetActive(true);
@@ -264,11 +265,14 @@ public class CombatEncounter : MonoBehaviour
 
         foreach (CombatantAttackStrike strike in attack.Strikes)
         {
+            battleBeforeAttackFeedback.PlayFeedbacks();
             TimingJudgement judgement = TimingJudgement.Miss;
             yield return PlayCountdown(
                 strike.CountdownPattern,
                 result => judgement = result);
 
+            battleBeforeAttackFeedback.StopFeedbacks();
+            battleAttackFeedback.PlayFeedbacks();
             StartCoroutine(MoveToAttackPositionAndGoBack(playerController2D.transform));
             playerAnimator.PlayAnimationTrigger("Player Attacking");
             int damage = GetAttackDamage(judgement, strike.Damage);

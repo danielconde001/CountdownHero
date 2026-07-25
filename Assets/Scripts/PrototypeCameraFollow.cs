@@ -33,7 +33,7 @@ public class PrototypeCameraFollow : MonoBehaviour
         zoneOverrides.Count > 0 ? zoneOverrides[^1].FixedPosition : baseFixedPosition;
 
     private bool useBattleFocus;
-    private Vector3 battleFocus;
+    private Transform battleFocus;
     private PlatformingMode basePlatformingMode;
     private Vector3 baseFixedPosition;
     private readonly List<ZoneOverride> zoneOverrides = new List<ZoneOverride>();
@@ -68,15 +68,10 @@ public class PrototypeCameraFollow : MonoBehaviour
         target = followTarget;
     }
 
-    public void EnterBattleView(Vector3 focus)
+    public void EnterBattleView(Transform focus)
     {
         battleFocus = focus;
         useBattleFocus = true;
-    }
-
-    public void ChangeBattleViewFocus(Vector3 focus)
-    {
-        if(useBattleFocus == true) battleFocus = focus;
     }
 
     public void ExitBattleView()
@@ -158,7 +153,7 @@ public class PrototypeCameraFollow : MonoBehaviour
         // the camera naturally resumes whichever platforming mode was active.
         if (useBattleFocus)
         {
-            Vector3 battleDestination = new Vector3(battleFocus.x, battleFocus.y, offset.z);
+            Vector3 battleDestination = new Vector3(battleFocus.position.x, battleFocus.position.y, offset.z);
             transform.position = SmoothTowards(battleDestination);
             return;
         }
