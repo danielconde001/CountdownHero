@@ -17,5 +17,6 @@ public class SceneField
     public static implicit operator string(SceneField sceneField) => sceneField._sceneName;
 
 
-    public void Load() => SceneManager.LoadScene(_sceneName);
+    public void Load() => FadeManager.ShowFade(() => SceneManager.LoadScene(_sceneName, LoadSceneMode.Single));
+    public void LoadAdditive() => SceneManager.LoadScene(_sceneName, LoadSceneMode.Additive);
 }

@@ -26,7 +26,7 @@ public class SceneLoadTrigger : MonoBehaviour
         if (other.gameObject.tag != _playerTag)
             return;
 
-        FadeManager.ShowFade(() => _sceneToLoad.Load());
+        _sceneToLoad.Load();
     }
 
 
