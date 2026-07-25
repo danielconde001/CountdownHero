@@ -23,6 +23,7 @@ public class TimedSwitch : MonoBehaviour
     }
 
     [SerializeField] private ActivationMode mode = ActivationMode.OnTriggerEnter;
+    [SerializeField] private InputActionReference _interactAction;
     [SerializeField] private SwitchTarget[] targets;
     [SerializeField, Min(0f)] private float cooldown = 0.5f;
 
@@ -116,7 +117,7 @@ public class TimedSwitch : MonoBehaviour
             return;
         }
 
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        if (_interactAction.action.WasPressedThisFrame())
         {
             PlayPromptPressAnimation();
             ActivateTargets();

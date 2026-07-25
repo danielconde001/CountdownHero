@@ -178,11 +178,19 @@ public static class InputControlPaths
         "<Gamepad>/leftStick",
         "<Gamepad>/leftStick/x",
         "<Gamepad>/leftStick/y",
+        "<Gamepad>/leftStick/up",
+        "<Gamepad>/leftStick/down",
+        "<Gamepad>/leftStick/left",
+        "<Gamepad>/leftStick/right",
         "<Gamepad>/leftStickPress",
 
         "<Gamepad>/rightStick",
         "<Gamepad>/rightStick/x",
         "<Gamepad>/rightStick/y",
+        "<Gamepad>/rightStick/up",
+        "<Gamepad>/rightStick/down",
+        "<Gamepad>/rightStick/left",
+        "<Gamepad>/rightStick/right",
         "<Gamepad>/rightStickPress",
 
         // DPad

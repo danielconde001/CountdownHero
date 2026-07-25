@@ -13,18 +13,8 @@ MonoBehaviour:
   m_Name: InputPromptDatabase
   m_EditorClassIdentifier: Assembly-CSharp::InputPromptDatabase
   _prompts:
-  - controlPath: <Keyboard>/w
-    generic: {fileID: 21300000, guid: 6cc993ada4e30514daa6cfe5c869d4eb, type: 3}
-    xbox: {fileID: 0}
-    playStation: {fileID: 0}
-    nintendo: {fileID: 0}
   - controlPath: <Keyboard>/a
     generic: {fileID: 21300000, guid: 8741fb65635307146ae984562653e429, type: 3}
-    xbox: {fileID: 0}
-    playStation: {fileID: 0}
-    nintendo: {fileID: 0}
-  - controlPath: <Keyboard>/s
-    generic: {fileID: 21300000, guid: 69ca6ffc49969bb48bc700dcc49c6e5c, type: 3}
     xbox: {fileID: 0}
     playStation: {fileID: 0}
     nintendo: {fileID: 0}
@@ -43,11 +33,16 @@ MonoBehaviour:
     xbox: {fileID: 0}
     playStation: {fileID: 0}
     nintendo: {fileID: 0}
-  - controlPath: <Gamepad>/leftStick
-    generic: {fileID: 21300000, guid: a8c69a3a0860f8e4c8e07a1cddc1bd35, type: 3}
-    xbox: {fileID: 21300000, guid: a8c69a3a0860f8e4c8e07a1cddc1bd35, type: 3}
-    playStation: {fileID: 21300000, guid: 02579675dd8069f42a3a92799c00f235, type: 3}
-    nintendo: {fileID: 21300000, guid: a7f6e5caa512b4348acc1286889f1ec4, type: 3}
+  - controlPath: <Gamepad>/leftStick/left
+    generic: {fileID: 21300000, guid: 6fb768094b744c04a833ef67c456cf35, type: 3}
+    xbox: {fileID: 21300000, guid: 6fb768094b744c04a833ef67c456cf35, type: 3}
+    playStation: {fileID: 21300000, guid: 4a00d018c44090a44a77f67a9d106103, type: 3}
+    nintendo: {fileID: 21300000, guid: 642bc1280f7863e4c8c6aff066aeaee0, type: 3}
+  - controlPath: <Gamepad>/leftStick/right
+    generic: {fileID: 21300000, guid: 27fe6d3b600ab6144ae9f8800f01e914, type: 3}
+    xbox: {fileID: 21300000, guid: 27fe6d3b600ab6144ae9f8800f01e914, type: 3}
+    playStation: {fileID: 21300000, guid: 2938e57216d72374991b4586d37309b1, type: 3}
+    nintendo: {fileID: 21300000, guid: 119ded6cf14d83b42a0eaf67e9108e15, type: 3}
   - controlPath: <Gamepad>/buttonWest
     generic: {fileID: 21300000, guid: 368f3cf88cfa6194b890999fb15ae0fb, type: 3}
     xbox: {fileID: 21300000, guid: 368f3cf88cfa6194b890999fb15ae0fb, type: 3}
