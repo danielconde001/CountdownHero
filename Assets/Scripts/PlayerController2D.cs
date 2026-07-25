@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 /// <summary>
 /// Owns responsive platforming movement and the player's traversal states.
@@ -57,6 +58,8 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField] private float wallCheckDistance = 0.06f;
     [SerializeField] private float wallSlideMinFallSpeed = 0.75f;
     [SerializeField] private float wallSlideMaxFallSpeed = 3.5f;
+
+    public UnityEvent OnPerformJump;
 
     /// <summary>True during both the ledge hang and automatic pull-up.</summary>
     public bool IsLedgeClimbing { get; private set; }
@@ -518,6 +521,8 @@ public class PlayerController2D : MonoBehaviour
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        OnPerformJump.Invoke();
     }
 
     /// <summary>

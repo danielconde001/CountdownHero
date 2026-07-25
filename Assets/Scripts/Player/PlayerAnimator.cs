@@ -11,33 +11,49 @@ public class PlayerAnimator : MonoBehaviour
     [Header("Feedback")]
     [SerializeField] private MMF_Player playerIdleFeedback;
     [SerializeField] private MMF_Player playerRunningFeedback;
+    [SerializeField] private MMF_Player playerJumpingFeedback;
+    [SerializeField] private MMF_Player playerLandingFeedback;
 
     private bool isMoving = false;
+    private bool isAirborne = false;
 
     private void Update()
     {
-        if(playerController2D.IsMoving == true && isMoving == false)
+        if(playerController2D.IsAirborne == false)
         {
-            playerIdleFeedback.StopFeedbacks();
-            playerRunningFeedback.PlayFeedbacks();
-            playerAnimator.SetBool("Player Moving", playerController2D.IsMoving);
-            isMoving = true;
-        }
-        else if(playerController2D.IsMoving == false && isMoving == true)
-        {
-            playerIdleFeedback.PlayFeedbacks();
-            playerRunningFeedback.StopFeedbacks();
-            playerAnimator.SetBool("Player Moving", playerController2D.IsMoving);
-            isMoving = false;
-        }
-
-        if(playerController2D.IsAirborne == true)
-        {
-            playerIdleFeedback.StopFeedbacks();
-            playerRunningFeedback.StopFeedbacks();
+            if( playerController2D.IsMoving == true && isMoving == false)
+            {
+                playerIdleFeedback.StopFeedbacks();
+                playerRunningFeedback.PlayFeedbacks();
+                playerAnimator.SetBool("Player Moving", playerController2D.IsMoving);
+                isMoving = true;
+            }
+            else if(playerController2D.IsMoving == false && isMoving == true)
+            {
+                playerIdleFeedback.PlayFeedbacks();
+                playerRunningFeedback.StopFeedbacks();
+                playerAnimator.SetBool("Player Moving", playerController2D.IsMoving);
+                isMoving = false;
+            }
         }
 
-        playerAnimator.SetBool("Player Airborne", playerController2D.IsAirborne);
+        if(playerController2D.IsAirborne == true && isAirborne == false)
+        {
+            playerIdleFeedback.StopFeedbacks();
+            playerRunningFeedback.StopFeedbacks();
+            playerLandingFeedback.StopFeedbacks();
+            playerAnimator.SetBool("Player Airborne", playerController2D.IsAirborne);
+            isAirborne = true;
+        }
+        else if(playerController2D.IsAirborne == false && isAirborne == true)
+        {
+            playerJumpingFeedback.StopFeedbacks();
+            playerLandingFeedback.PlayFeedbacks();
+            isMoving = playerController2D.IsMoving == true ? false : true;
+            playerAnimator.SetBool("Player Airborne", playerController2D.IsAirborne);
+            isAirborne = false;
+        }
+        
         playerAnimator.SetBool("Player Ledge Climbing", playerController2D.IsLedgeClimbing);
         playerAnimator.SetBool("Player Wall Sliding", playerController2D.IsWallSliding);
 
