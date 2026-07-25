@@ -48,12 +48,19 @@ public class TimedSwitch : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float promptStartScale = 0.5f;
     [SerializeField] private float promptStartRotation = 10f;
 
+    [Header("Prompt Press Animation")]
+    [SerializeField, Min(0f)] private float promptPopDuration = 0.12f;
+    [SerializeField, Min(1f)] private float promptPopScale = 1.25f;
+    [SerializeField] private Color promptPressedColor = new Color(1f, 0.85f, 0.1f, 1f);
+    [SerializeField, Min(0f)] private float promptDisappearDuration = 0.18f;
+
     private bool isOnCooldown;
     private bool playerInRange;
+    private bool isPromptPressAnimating;
     private Collider2D switchCollider;
     private Coroutine cooldownRoutine;
     private SpriteRenderer promptImageRenderer;
-    private Sequence promptShowSequence;
+    private Sequence promptAnimationSequence;
     private Vector3 promptVisibleScale;
     private Quaternion promptVisibleRotation;
     private Color promptVisibleColor;
@@ -100,6 +107,7 @@ public class TimedSwitch : MonoBehaviour
 
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
+            PlayPromptPressAnimation();
             ActivateTargets();
         }
     }
@@ -257,7 +265,9 @@ public class TimedSwitch : MonoBehaviour
 
     private void SetInteractPromptVisible(bool visible)
     {
-        if (interactPrompt == null || interactPrompt.activeSelf == visible)
+        if (interactPrompt == null
+            || (!visible && isPromptPressAnimating)
+            || interactPrompt.activeSelf == visible)
         {
             return;
         }
@@ -352,35 +362,88 @@ public class TimedSwitch : MonoBehaviour
             return;
         }
 
-        promptShowSequence = DOTween.Sequence();
-        promptShowSequence.Join(
+        promptAnimationSequence = DOTween.Sequence();
+        promptAnimationSequence.Join(
             promptTransform.DOScale(promptVisibleScale, duration)
                 .SetEase(promptShowEase));
-        promptShowSequence.Join(
+        promptAnimationSequence.Join(
             promptTransform.DOLocalRotateQuaternion(promptVisibleRotation, duration)
                 .SetEase(promptShowEase));
 
         if (promptImageRenderer != null)
         {
-            promptShowSequence.Join(
+            promptAnimationSequence.Join(
                 promptImageRenderer.DOFade(promptVisibleColor.a, duration)
                     .SetEase(promptShowEase));
         }
 
-        promptShowSequence
+        promptAnimationSequence
             .SetTarget(interactPrompt)
-            .OnComplete(() => promptShowSequence = null);
+            .OnComplete(() => promptAnimationSequence = null);
     }
 
-    private void KillPromptAnimation()
+    private void PlayPromptPressAnimation()
     {
-        if (promptShowSequence == null)
+        if (interactPrompt == null || !interactPrompt.activeSelf)
         {
             return;
         }
 
-        promptShowSequence.Kill();
-        promptShowSequence = null;
+        KillPromptAnimation();
+        isPromptPressAnimating = true;
+        RestorePromptVisibleState();
+
+        Transform promptTransform = interactPrompt.transform;
+        float popDuration = Mathf.Max(0f, promptPopDuration);
+        float disappearDuration = Mathf.Max(0f, promptDisappearDuration);
+
+        promptAnimationSequence = DOTween.Sequence();
+        promptAnimationSequence.Append(
+            promptTransform.DOScale(promptVisibleScale * promptPopScale, popDuration)
+                .SetEase(Ease.OutBack));
+
+        if (promptImageRenderer != null)
+        {
+            promptAnimationSequence.Join(
+                promptImageRenderer.DOColor(promptPressedColor, popDuration)
+                    .SetEase(Ease.OutQuad));
+        }
+
+        promptAnimationSequence.Append(
+            promptTransform.DOScale(Vector3.zero, disappearDuration)
+                .SetEase(Ease.InBack));
+
+        if (promptImageRenderer != null)
+        {
+            promptAnimationSequence.Join(
+                promptImageRenderer.DOFade(0f, disappearDuration)
+                    .SetEase(Ease.InQuad));
+        }
+
+        promptAnimationSequence
+            .SetTarget(interactPrompt)
+            .OnComplete(CompletePromptPressAnimation);
+    }
+
+    private void CompletePromptPressAnimation()
+    {
+        promptAnimationSequence = null;
+        isPromptPressAnimating = false;
+        interactPrompt.SetActive(false);
+        RestorePromptVisibleState();
+    }
+
+    private void KillPromptAnimation()
+    {
+        isPromptPressAnimating = false;
+
+        if (promptAnimationSequence == null)
+        {
+            return;
+        }
+
+        promptAnimationSequence.Kill();
+        promptAnimationSequence = null;
     }
 
     private void RestorePromptVisibleState()
