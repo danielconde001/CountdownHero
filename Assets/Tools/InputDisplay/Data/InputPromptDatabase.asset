@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b6eff14dadcb344ae17a8dbf6cde73, type: 3}
+  m_Name: InputPromptDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::InputPromptDatabase
+  _prompts:
+  - controlPath: <Keyboard>/w
+    generic: {fileID: 21300000, guid: 6cc993ada4e30514daa6cfe5c869d4eb, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Keyboard>/a
+    generic: {fileID: 21300000, guid: 8741fb65635307146ae984562653e429, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Keyboard>/s
+    generic: {fileID: 21300000, guid: 69ca6ffc49969bb48bc700dcc49c6e5c, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Keyboard>/d
+    generic: {fileID: 21300000, guid: 6508de20becb846448a043191fb6899f, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Keyboard>/e
+    generic: {fileID: 21300000, guid: 66f0c33c2a5138540a7bb4e0bdc3899e, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Keyboard>/space
+    generic: {fileID: 21300000, guid: ff79c577f4a5eb443b212d8b2695b75e, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Gamepad>/leftStick
+    generic: {fileID: 21300000, guid: a8c69a3a0860f8e4c8e07a1cddc1bd35, type: 3}
+    xbox: {fileID: 21300000, guid: a8c69a3a0860f8e4c8e07a1cddc1bd35, type: 3}
+    playStation: {fileID: 21300000, guid: 02579675dd8069f42a3a92799c00f235, type: 3}
+    nintendo: {fileID: 21300000, guid: a7f6e5caa512b4348acc1286889f1ec4, type: 3}
+  - controlPath: <Gamepad>/buttonEast
+    generic: {fileID: 21300000, guid: 368f3cf88cfa6194b890999fb15ae0fb, type: 3}
+    xbox: {fileID: 21300000, guid: 368f3cf88cfa6194b890999fb15ae0fb, type: 3}
+    playStation: {fileID: 21300000, guid: 79a059391d4149e4dad35ab6cffdca41, type: 3}
+    nintendo: {fileID: 21300000, guid: 36db594b13902a942846c79d11c4d265, type: 3}
+  - controlPath: <Gamepad>/buttonSouth
+    generic: {fileID: 21300000, guid: 96d21b0817b1cf14d8ad4112e24aeba6, type: 3}
+    xbox: {fileID: 21300000, guid: 96d21b0817b1cf14d8ad4112e24aeba6, type: 3}
+    playStation: {fileID: 21300000, guid: 8a210f7307e1af74c8f52d4384e8399f, type: 3}
+    nintendo: {fileID: 21300000, guid: fd1fcc27b1a2be54b8b2bbe2b188f020, type: 3}
