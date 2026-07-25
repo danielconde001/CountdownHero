@@ -23,6 +23,7 @@ public class CombatEncounter : MonoBehaviour
     [Header("Scene participants")]
     [SerializeField] private BattleCombatant playerCombatant;
     [SerializeField] private BattleCombatant enemyCombatant;
+    [SerializeField] private Animator enemyAnimator;
     [SerializeField] private Transform enemy;
 
     [Header("Encounter staging")]
@@ -40,6 +41,8 @@ public class CombatEncounter : MonoBehaviour
     [SerializeField] private MMF_Player battleStartFeedback;
     [SerializeField] private MMF_Player battleBeforeAttackFeedback;
     [SerializeField] private MMF_Player battleAttackFeedback;
+    [SerializeField] private MMF_Player battleDefendFeedback;
+    [SerializeField] private MMF_Player battleMissFeedback;
     [SerializeField] private MMF_Player battleEndFeedback;
 
     private bool hasStarted;
@@ -122,7 +125,6 @@ public class CombatEncounter : MonoBehaviour
         if (playerWon)
         {
             playerAnimator.PlayAnimationTrigger("Player Victory");
-            enemy.gameObject.SetActive(false);
         }
         else
         {
@@ -172,37 +174,45 @@ public class CombatEncounter : MonoBehaviour
 
             foreach (CombatantAttackStrike strike in selectedAttack.Strikes)
             {
+                battleBeforeAttackFeedback.PlayFeedbacks();
                 TimingJudgement defenseJudgement = TimingJudgement.Miss;
                 yield return PlayCountdown(
                     strike.CountdownPattern,
                     result => defenseJudgement = result);
                 
-                StartCoroutine(MoveToAttackPositionAndGoBack(enemy));
+                battleBeforeAttackFeedback.StopFeedbacks();
+                enemyAnimator.SetTrigger("Enemy Attack");
 
                 switch(defenseJudgement)
                 {
                     case TimingJudgement.TooEarly:
                     {
+                        battleMissFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Take Hit");
                         break;
                     }
                     case TimingJudgement.Miss:
                     {
+                        battleMissFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Take Hit");
                         break;
                     }
 
                     case TimingJudgement.Good:
                     {
+                        battleDefendFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Defending");
                         break;
                     }
                     case TimingJudgement.Perfect:
                     {
+                        battleDefendFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Defending");
                         break;
                     }
                 }
+
+                StartCoroutine(MoveToAttackPositionAndGoBack(enemy));
                 
                 int incomingDamage = GetIncomingDamage(defenseJudgement, strike.Damage);
                 playerCombatant.TakeDamage(incomingDamage);
@@ -274,7 +284,31 @@ public class CombatEncounter : MonoBehaviour
                 result => judgement = result);
 
             battleBeforeAttackFeedback.StopFeedbacks();
-            battleAttackFeedback.PlayFeedbacks();
+
+            switch(judgement)
+            {
+                case TimingJudgement.Perfect:
+                {
+                    battleAttackFeedback.PlayFeedbacks();
+                    break;
+                }
+                case TimingJudgement.Good:
+                {
+                    battleAttackFeedback.PlayFeedbacks();
+                    break;
+                }
+                case TimingJudgement.Miss:
+                {
+                    battleMissFeedback.PlayFeedbacks();
+                    break;
+                }
+                case TimingJudgement.TooEarly:
+                {
+                    battleMissFeedback.PlayFeedbacks();
+                    break;
+                }
+            }
+            
             StartCoroutine(MoveToAttackPositionAndGoBack(playerController2D.transform));
             playerAnimator.PlayAnimationTrigger("Player Attacking");
             int damage = GetAttackDamage(judgement, strike.Damage);
@@ -284,10 +318,12 @@ public class CombatEncounter : MonoBehaviour
 
             if(enemyCombatant.IsDefeated == true)
             {
+                enemyAnimator.SetTrigger("Enemy Death");
                 StartCoroutine(MoveToAttackPositionAndStay(playerController2D.transform));
             }
             else
             {
+                enemyAnimator.SetTrigger("Enemy Take Hit");
                 StartCoroutine(MoveToAttackPositionAndGoBack(playerController2D.transform));
             }
 
@@ -447,7 +483,7 @@ public class CombatEncounter : MonoBehaviour
 
         target.position = attackPoint.position;
 
-        yield return new WaitForSeconds(ActionResultPause);
+        yield return new WaitForSeconds(0.5f);
 
         elapsed = 0f;
 
