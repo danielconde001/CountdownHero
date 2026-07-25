@@ -27,6 +27,8 @@ public class TimedGeyser : SwitchTarget
     private Coroutine sequenceRoutine;
     private bool isActive;
 
+    public override bool IsActivationRunning => sequenceRoutine != null;
+
     private void Awake()
     {
         GetComponent<Collider2D>().isTrigger = true;

@@ -57,6 +57,8 @@ public class TimedPlatform : SwitchTarget
     private Vector3 originalScale;
     private readonly HashSet<Rigidbody2D> passengers = new HashSet<Rigidbody2D>();
 
+    public override bool IsActivationRunning => isSequenceRunning;
+
     private void Awake()
     {
         platformRenderers = GetComponentsInChildren<Renderer>(true);

@@ -29,7 +29,7 @@ public class DeathZone : MonoBehaviour
             string sceneToReload = string.IsNullOrEmpty(activeScene.path)
                 ? activeScene.name
                 : activeScene.path;
-            SceneManager.LoadScene(sceneToReload);
+            FadeManager.ShowFade( () => SceneManager.LoadScene(sceneToReload) );
         }
     }
 }

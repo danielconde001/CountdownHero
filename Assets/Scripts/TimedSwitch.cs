@@ -15,14 +15,31 @@ public class TimedSwitch : MonoBehaviour
         OnJumpedOn
     }
 
+    public enum PromptVisual
+    {
+        Text,
+        Image
+    }
+
     [SerializeField] private ActivationMode mode = ActivationMode.OnTriggerEnter;
     [SerializeField] private SwitchTarget[] targets;
     [SerializeField, Min(0f)] private float cooldown = 0.5f;
+
     [Header("Prompt")]
+    [Tooltip("An optional custom prompt object. When empty, the selected visual is created at runtime.")]
     [SerializeField] private GameObject interactPrompt;
-    [SerializeField] private string interactPromptText = "Press E";
+    [SerializeField] private PromptVisual promptVisual = PromptVisual.Image;
     [SerializeField] private Vector3 interactPromptOffset = new Vector3(0f, 1.25f, 0f);
+
+    [Header("Text Prompt")]
+    [SerializeField] private string interactPromptText = "E";
     [SerializeField, Min(0.1f)] private float interactPromptFontSize = 0.35f;
+
+    [Header("Image Prompt")]
+    [SerializeField] private Sprite interactPromptImage;
+    [SerializeField] private Vector3 interactPromptImageScale = Vector3.one;
+    [SerializeField] private Color interactPromptImageColor = Color.white;
+    [SerializeField] private int interactPromptImageSortingOrder = 10;
 
     private bool isOnCooldown;
     private bool playerInRange;
@@ -58,9 +75,12 @@ public class TimedSwitch : MonoBehaviour
 
     private void Update()
     {
-        if (mode != ActivationMode.OnInteractPress || !playerInRange || isOnCooldown)
+        RefreshInteractPrompt();
+
+        if (mode != ActivationMode.OnInteractPress
+            || !playerInRange
+            || !CanActivateTargets())
         {
-            RefreshInteractPrompt();
             return;
         }
 
@@ -162,7 +182,7 @@ public class TimedSwitch : MonoBehaviour
 
     private void ActivateTargets()
     {
-        if (isOnCooldown)
+        if (isOnCooldown || IsAnyTargetRunning())
         {
             return;
         }
@@ -180,6 +200,8 @@ public class TimedSwitch : MonoBehaviour
                 target.Activate();
             }
         }
+
+        RefreshInteractPrompt();
 
         float duration = Mathf.Max(0f, cooldown);
         if (duration > 0f)
@@ -220,7 +242,7 @@ public class TimedSwitch : MonoBehaviour
 
     private void SetInteractPromptVisible(bool visible)
     {
-        if (interactPrompt != null)
+        if (interactPrompt != null && interactPrompt.activeSelf != visible)
         {
             interactPrompt.SetActive(visible);
         }
@@ -237,15 +259,31 @@ public class TimedSwitch : MonoBehaviour
         promptObject.transform.SetParent(transform);
         promptObject.transform.localPosition = interactPromptOffset;
         promptObject.transform.localRotation = Quaternion.identity;
-        promptObject.transform.localScale = Vector3.one;
 
-        TextMesh promptText = promptObject.AddComponent<TextMesh>();
-        promptText.text = interactPromptText;
-        promptText.anchor = TextAnchor.MiddleCenter;
-        promptText.alignment = TextAlignment.Center;
-        promptText.fontSize = 24;
-        promptText.characterSize = interactPromptFontSize;
-        promptText.color = Color.white;
+        if (promptVisual == PromptVisual.Image)
+        {
+            promptObject.transform.localScale = interactPromptImageScale;
+            SpriteRenderer promptImage = promptObject.AddComponent<SpriteRenderer>();
+            promptImage.sprite = interactPromptImage;
+            promptImage.color = interactPromptImageColor;
+            promptImage.sortingOrder = interactPromptImageSortingOrder;
+
+            if (interactPromptImage == null)
+            {
+                Debug.LogWarning($"{name}: Image prompt selected, but no prompt Sprite is assigned.");
+            }
+        }
+        else
+        {
+            promptObject.transform.localScale = Vector3.one;
+            TextMesh promptText = promptObject.AddComponent<TextMesh>();
+            promptText.text = interactPromptText;
+            promptText.anchor = TextAnchor.MiddleCenter;
+            promptText.alignment = TextAlignment.Center;
+            promptText.fontSize = 24;
+            promptText.characterSize = interactPromptFontSize;
+            promptText.color = Color.white;
+        }
 
         interactPrompt = promptObject;
     }
@@ -254,7 +292,50 @@ public class TimedSwitch : MonoBehaviour
     {
         bool shouldShow = mode == ActivationMode.OnInteractPress
             && playerInRange
-            && !isOnCooldown;
+            && CanActivateTargets();
         SetInteractPromptVisible(shouldShow);
+    }
+
+    private bool CanActivateTargets()
+    {
+        if (isOnCooldown || targets == null || targets.Length == 0)
+        {
+            return false;
+        }
+
+        bool hasTarget = false;
+        foreach (SwitchTarget target in targets)
+        {
+            if (target == null)
+            {
+                continue;
+            }
+
+            hasTarget = true;
+            if (target.IsActivationRunning)
+            {
+                return false;
+            }
+        }
+
+        return hasTarget;
+    }
+
+    private bool IsAnyTargetRunning()
+    {
+        if (targets == null)
+        {
+            return false;
+        }
+
+        foreach (SwitchTarget target in targets)
+        {
+            if (target != null && target.IsActivationRunning)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -1577,9 +1577,14 @@ MonoBehaviour:
   - {fileID: 976914941}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
-  interactPromptText: Press E
+  promptVisual: 1
   interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptText: E
   interactPromptFontSize: 0.35
+  interactPromptImage: {fileID: 21300000, guid: 77c1ee0a28fe9774c85bd5ff52aef417, type: 3}
+  interactPromptImageScale: {x: 0.25, y: 0.25, z: 0.25}
+  interactPromptImageColor: {r: 1, g: 1, b: 1, a: 1}
+  interactPromptImageSortingOrder: 10
 --- !u!61 &681931509
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2384,9 +2389,14 @@ MonoBehaviour:
   - {fileID: 1449606318}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
-  interactPromptText: Press E
+  promptVisual: 1
   interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptText: E
   interactPromptFontSize: 0.35
+  interactPromptImage: {fileID: 21300000, guid: 77c1ee0a28fe9774c85bd5ff52aef417, type: 3}
+  interactPromptImageScale: {x: 0.25, y: 0.25, z: 0.25}
+  interactPromptImageColor: {r: 1, g: 1, b: 1, a: 1}
+  interactPromptImageSortingOrder: 10
 --- !u!61 &1021025586
 BoxCollider2D:
   m_ObjectHideFlags: 0
