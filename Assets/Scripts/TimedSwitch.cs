@@ -18,7 +18,11 @@ public class TimedSwitch : MonoBehaviour
     [SerializeField] private ActivationMode mode = ActivationMode.OnTriggerEnter;
     [SerializeField] private SwitchTarget[] targets;
     [SerializeField, Min(0f)] private float cooldown = 0.5f;
+    [Header("Prompt")]
     [SerializeField] private GameObject interactPrompt;
+    [SerializeField] private string interactPromptText = "Press E";
+    [SerializeField] private Vector3 interactPromptOffset = new Vector3(0f, 1.25f, 0f);
+    [SerializeField, Min(0.1f)] private float interactPromptFontSize = 0.35f;
 
     private bool isOnCooldown;
     private bool playerInRange;
@@ -35,7 +39,8 @@ public class TimedSwitch : MonoBehaviour
         }
 
         ConfigureCollider();
-        SetInteractPromptVisible(false);
+        EnsureInteractPrompt();
+        RefreshInteractPrompt();
     }
 
     private void OnDisable()
@@ -55,6 +60,7 @@ public class TimedSwitch : MonoBehaviour
     {
         if (mode != ActivationMode.OnInteractPress || !playerInRange || isOnCooldown)
         {
+            RefreshInteractPrompt();
             return;
         }
 
@@ -80,7 +86,7 @@ public class TimedSwitch : MonoBehaviour
         if (mode == ActivationMode.OnInteractPress)
         {
             playerInRange = true;
-            SetInteractPromptVisible(true);
+            RefreshInteractPrompt();
         }
     }
 
@@ -90,7 +96,7 @@ public class TimedSwitch : MonoBehaviour
             && other.TryGetComponent(out PlayerController2D _))
         {
             playerInRange = false;
-            SetInteractPromptVisible(false);
+            RefreshInteractPrompt();
         }
     }
 
@@ -127,6 +133,8 @@ public class TimedSwitch : MonoBehaviour
         targets = timedTargets;
         cooldown = cooldownDuration;
         interactPrompt = prompt;
+        EnsureInteractPrompt();
+        RefreshInteractPrompt();
     }
 
     private void ConfigureCollider()
@@ -177,6 +185,7 @@ public class TimedSwitch : MonoBehaviour
         if (duration > 0f)
         {
             isOnCooldown = true;
+            RefreshInteractPrompt();
             cooldownRoutine = StartCoroutine(CooldownRoutine(duration));
         }
     }
@@ -186,6 +195,7 @@ public class TimedSwitch : MonoBehaviour
         yield return new WaitForSeconds(duration);
         isOnCooldown = false;
         cooldownRoutine = null;
+        RefreshInteractPrompt();
     }
 
     private bool WasHitFromAbove(Collision2D collision)
@@ -214,5 +224,37 @@ public class TimedSwitch : MonoBehaviour
         {
             interactPrompt.SetActive(visible);
         }
+    }
+
+    private void EnsureInteractPrompt()
+    {
+        if (mode != ActivationMode.OnInteractPress || interactPrompt != null)
+        {
+            return;
+        }
+
+        var promptObject = new GameObject("Interact Prompt");
+        promptObject.transform.SetParent(transform);
+        promptObject.transform.localPosition = interactPromptOffset;
+        promptObject.transform.localRotation = Quaternion.identity;
+        promptObject.transform.localScale = Vector3.one;
+
+        TextMesh promptText = promptObject.AddComponent<TextMesh>();
+        promptText.text = interactPromptText;
+        promptText.anchor = TextAnchor.MiddleCenter;
+        promptText.alignment = TextAlignment.Center;
+        promptText.fontSize = 24;
+        promptText.characterSize = interactPromptFontSize;
+        promptText.color = Color.white;
+
+        interactPrompt = promptObject;
+    }
+
+    private void RefreshInteractPrompt()
+    {
+        bool shouldShow = mode == ActivationMode.OnInteractPress
+            && playerInRange
+            && !isOnCooldown;
+        SetInteractPromptVisible(shouldShow);
     }
 }

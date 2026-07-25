@@ -79,7 +79,7 @@ public static class PrototypeGeyserBuilder
             new Color(1f, 0.9f, 0.25f));
 
         TimedGeyser geyser = geyserObject.AddComponent<TimedGeyser>();
-        geyser.Initialize(1.5f, 4f, 55f, 18f, blastVisual, countdown);
+        geyser.Initialize(1.5f, 4f, 18f, blastVisual, countdown);
         return geyser;
     }
 

@@ -1314,8 +1314,8 @@ Transform:
   m_GameObject: {fileID: 825408545}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.25}
-  m_LocalScale: {x: 1, y: 1, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.65, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1798195455}
@@ -2816,8 +2816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TimedGeyser
   countdownDuration: 3
   activeDuration: 3
-  acceleration: 110
-  maximumSpeed: 36
+  launchSpeed: 18
   activeVisual: {fileID: 1303737522}
   countdownDisplay: {fileID: 1887236589}
   onActivated:
@@ -2918,7 +2917,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 4, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 825408546}
@@ -2941,6 +2940,9 @@ MonoBehaviour:
   - {fileID: 1774328466}
   cooldown: 0.5
   interactPrompt: {fileID: 0}
+  interactPromptText: Press E
+  interactPromptOffset: {x: 0, y: 1.25, z: 0}
+  interactPromptFontSize: 0.35
 --- !u!61 &1798195457
 BoxCollider2D:
   m_ObjectHideFlags: 0

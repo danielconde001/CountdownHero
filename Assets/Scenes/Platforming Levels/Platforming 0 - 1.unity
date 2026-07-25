@@ -2303,7 +2303,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2046078776}
   m_Layer: 0
-  m_Name: Timed Platform
+  m_Name: Timed Platforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

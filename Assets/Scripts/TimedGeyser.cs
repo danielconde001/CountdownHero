@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 /// <summary>
-/// A switch-activated directional force zone. Its trigger collider defines the
-/// geyser's trajectory, while transform.up defines the direction of the blast.
+/// A switch-activated launcher. Entering its trigger while active replaces the
+/// player's velocity once; leaving and re-entering allows another launch.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class TimedGeyser : SwitchTarget
@@ -14,8 +15,8 @@ public class TimedGeyser : SwitchTarget
     [SerializeField, Min(0f)] private float activeDuration = 3f;
 
     [Header("Blast")]
-    [SerializeField, Min(0f)] private float acceleration = 55f;
-    [SerializeField, Min(0f)] private float maximumSpeed = 18f;
+    [FormerlySerializedAs("maximumSpeed")]
+    [SerializeField, Min(0f)] private float launchSpeed = 18f;
 
     [Header("Feedback")]
     [SerializeField] private GameObject activeVisual;
@@ -55,15 +56,13 @@ public class TimedGeyser : SwitchTarget
     public void Initialize(
         float countdown,
         float activeTime,
-        float blastAcceleration,
-        float speedLimit,
+        float speed,
         GameObject visual = null,
         TextMesh display = null)
     {
         countdownDuration = countdown;
         activeDuration = activeTime;
-        acceleration = blastAcceleration;
-        maximumSpeed = speedLimit;
+        launchSpeed = speed;
         activeVisual = visual;
         countdownDisplay = display;
     }
@@ -84,21 +83,24 @@ public class TimedGeyser : SwitchTarget
         sequenceRoutine = null;
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isActive || !other.TryGetComponent(out PlayerController2D player))
+        if (!isActive)
         {
             return;
         }
 
-        Rigidbody2D playerBody = other.attachedRigidbody;
-        Vector2 direction = transform.up;
-        if (playerBody != null && Vector2.Dot(playerBody.linearVelocity, direction) >= maximumSpeed)
+        PlayerController2D player = other.attachedRigidbody != null
+            ? other.attachedRigidbody.GetComponent<PlayerController2D>()
+            : other.GetComponent<PlayerController2D>();
+        if (player == null)
         {
             return;
         }
 
-        player.AddExternalAcceleration(direction * acceleration);
+        // Replacing velocity makes every entry produce the same initial path,
+        // regardless of how quickly the player approached the geyser.
+        player.ApplyLaunchVelocity((Vector2)transform.up * launchSpeed);
     }
 
     private IEnumerator PlayCountdown()
