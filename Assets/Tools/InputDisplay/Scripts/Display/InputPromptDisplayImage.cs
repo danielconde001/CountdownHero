@@ -14,4 +14,8 @@ public class InputPromptDisplayImage : InputPromptDisplay
     }
 
     protected override void ApplySprite() => _image.sprite = GetActionSprite();
+
+
+    public override Color GetColor() => _image.color;
+    public override void SetColor(Color color) => _image.color = color;
 }

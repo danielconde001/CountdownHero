@@ -13,4 +13,8 @@ public class InputPromptDisplayRenderer : InputPromptDisplay
     }
 
     protected override void ApplySprite() => _spriteRenderer.sprite = GetActionSprite();
+
+
+    public override Color GetColor() => _spriteRenderer.color;
+    public override void SetColor(Color color) => _spriteRenderer.color = color;
 }

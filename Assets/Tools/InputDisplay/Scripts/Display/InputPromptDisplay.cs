@@ -88,4 +88,8 @@ public abstract class InputPromptDisplay : MonoBehaviour
 
         return -1;
     }
+
+
+    public abstract Color GetColor();
+    public abstract void SetColor(Color color);
 }

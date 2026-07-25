@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class SceneLoadTrigger : MonoBehaviour
+public class TriggerEventBox : MonoBehaviour
 {
-    [SerializeField] private SceneField _sceneToLoad;
+    [SerializeField] private UnityEvent _onEnter;
+    [SerializeField] private UnityEvent _onExit;
 
     [HideInInspector][SerializeField] private Transform _transfrom;
     [HideInInspector][SerializeField] private BoxCollider2D _boxCollider;
-
 
     private const string _playerTag = "Player";
 
@@ -26,13 +27,21 @@ public class SceneLoadTrigger : MonoBehaviour
         if (other.gameObject.tag != _playerTag)
             return;
 
-        _sceneToLoad.Load();
+        _onEnter?.Invoke();
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag != _playerTag)
+            return;
+
+        _onExit?.Invoke();
     }
 
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.black;
+        Gizmos.color = Color.green;
         Gizmos.matrix = Matrix4x4.TRS(_transfrom.position, _transfrom.rotation, new Vector3(_transfrom.lossyScale.x, _transfrom.lossyScale.y, 0f));
         Gizmos.DrawWireCube(_boxCollider.offset, _boxCollider.size);
     }
