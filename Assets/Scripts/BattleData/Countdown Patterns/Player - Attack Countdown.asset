@@ -19,6 +19,6 @@ MonoBehaviour:
     duration: 0.6
   - text: 1
     duration: 0.6
-  perfectWindow: 0.16
-  goodWindow: 0.36
+  perfectWindow: 0.2
+  goodWindow: 0.5
   inputWindow: 0.6

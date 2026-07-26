@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f589dd02fb14c9189bc4474727d5969, type: 3}
-  m_Name: Player - Triple Attack
+  m_Name: Skeleton - Triple Strike
   m_EditorClassIdentifier: Assembly-CSharp::CombatantAttack
-  displayName: TRIPLE ATTACK
+  displayName: TRIPLE STIRKE
   selectionWeight: 1
   strikes:
-  - countdownPattern: {fileID: 11400000, guid: 70cb38d44427ce8409c8162a2fad48d0, type: 2}
+  - countdownPattern: {fileID: 11400000, guid: 39e4d1c147f204444af761119a9eceb7, type: 2}
     damage: 1
     delayAfter: 0.15
-  - countdownPattern: {fileID: 11400000, guid: 70cb38d44427ce8409c8162a2fad48d0, type: 2}
+  - countdownPattern: {fileID: 11400000, guid: 39e4d1c147f204444af761119a9eceb7, type: 2}
     damage: 1
     delayAfter: 0.15
-  - countdownPattern: {fileID: 11400000, guid: 31c850c94bd4465490e602ee2aad0bf8, type: 2}
+  - countdownPattern: {fileID: 11400000, guid: 39e4d1c147f204444af761119a9eceb7, type: 2}
     damage: 1
     delayAfter: 0

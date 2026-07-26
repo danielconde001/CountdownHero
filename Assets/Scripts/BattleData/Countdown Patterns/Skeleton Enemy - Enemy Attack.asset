@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ac63ae716ad48e8944dfd6a02e570d6, type: 3}
-  m_Name: Training Enemy - Enemy Attack
+  m_Name: Skeleton Enemy - Enemy Attack
   m_EditorClassIdentifier: Assembly-CSharp::CountdownPattern
   beats:
   - text: 3
-    duration: 0.7
+    duration: 0.6
   - text: 2
-    duration: 0.5
+    duration: 0.6
   - text: 1
-    duration: 0.65
-  perfectWindow: 0.16
-  goodWindow: 0.36
+    duration: 0.6
+  perfectWindow: 0.2
+  goodWindow: 0.5
   inputWindow: 0.6

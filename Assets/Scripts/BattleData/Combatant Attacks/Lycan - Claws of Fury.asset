@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f589dd02fb14c9189bc4474727d5969, type: 3}
-  m_Name: Player - Triple Attack
+  m_Name: Lycan - Claws of Fury
   m_EditorClassIdentifier: Assembly-CSharp::CombatantAttack
-  displayName: TRIPLE ATTACK
+  displayName: CLAWS OF FURY
   selectionWeight: 1
   strikes:
-  - countdownPattern: {fileID: 11400000, guid: 70cb38d44427ce8409c8162a2fad48d0, type: 2}
+  - countdownPattern: {fileID: 11400000, guid: 9ca313e636f216a47bc2ad2e02a7a8be, type: 2}
     damage: 1
     delayAfter: 0.15
-  - countdownPattern: {fileID: 11400000, guid: 70cb38d44427ce8409c8162a2fad48d0, type: 2}
+  - countdownPattern: {fileID: 11400000, guid: df323515888546f459c00446e48c8890, type: 2}
     damage: 1
     delayAfter: 0.15
-  - countdownPattern: {fileID: 11400000, guid: 31c850c94bd4465490e602ee2aad0bf8, type: 2}
+  - countdownPattern: {fileID: 11400000, guid: 6efa5351204a2104f8e55bf252c02d36, type: 2}
     damage: 1
     delayAfter: 0

@@ -510,6 +510,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1932178171}
     - target: {fileID: 497044714236618675, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
+      propertyPath: enemyProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 03595954af126474e93149599172a710, type: 2}
+    - target: {fileID: 497044714236618675, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
       propertyPath: playerCombatant
       value: 
       objectReference: {fileID: 952835796}
