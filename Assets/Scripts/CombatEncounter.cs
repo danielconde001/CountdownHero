@@ -33,14 +33,11 @@ public class CombatEncounter : MonoBehaviour
     [SerializeField] private Transform enemyBattlePoint;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform cameraPoint;
-    [SerializeField] private TextMesh encounterLabel;
-    [SerializeField] private TextMesh healthLabel;
     [Min(0.01f)]
     [SerializeField] private float transitionDuration = 0.55f;
     [SerializeField] private float attackDuration;
 
     [Header("Feedback")]
-    [SerializeField] private MMSoundManager mmSoundManager;
     [SerializeField] private MMF_Player battleStartFeedback;
     [SerializeField] private MMF_Player battleBeforeActionFeedback;
     [SerializeField] private MMF_Player battlePlayerAttackFeedback;
@@ -84,8 +81,6 @@ public class CombatEncounter : MonoBehaviour
         enemy = enemyTransform;
         playerBattlePoint = playerPoint;
         enemyBattlePoint = enemyPoint;
-        encounterLabel = label;
-        healthLabel = healthDisplay;
     }
 
     public void Begin(PlayerController2D player)
@@ -104,29 +99,28 @@ public class CombatEncounter : MonoBehaviour
     private IEnumerator RunEncounter()
     {
         playerController2D.SetControlLocked(true);
-        TextMeshFontUtility.ApplyFontMaterial(encounterLabel);
-        TextMeshFontUtility.ApplyFontMaterial(healthLabel);
-
+        
         // Vector3 battleCenter = (playerBattlePoint.position + enemyBattlePoint.position) * 0.5f;
         // battleCenter.y += BattleCameraHeight;
         cameraFollow.EnterBattleView(cameraPoint);
         battleStartFeedback.PlayFeedbacks();
 
-        encounterLabel.gameObject.SetActive(true);
-        healthLabel.gameObject.SetActive(true);
-        encounterLabel.text = "ENCOUNTER!";
-
-        yield return MoveToBattlePositions(playerController2D.transform);
-        yield return new WaitForSeconds(IntroPause);
-
         playerCombatant.ResetHealth();
         enemyCombatant.Configure(enemyProfile.MaxHealth);
         previousEnemyAttack = null;
         UpdateHealthDisplay();
+        CombatUI.SetupCombat(this, "Hero", playerCombatant.CurrentHealth, playerCombatant.MaxHealth, enemyProfile.DisplayName, enemyCombatant.CurrentHealth, enemyCombatant.MaxHealth);
+
+        CombatUI.SetCombatText("ENCOUNTER!");
+
+        yield return MoveToBattlePositions(playerController2D.transform);
+        yield return new WaitForSeconds(IntroPause);
+        
+
         yield return RunBattleLoop();
 
         bool playerWon = enemyCombatant.IsDefeated;
-        encounterLabel.text = playerWon ? "VICTORY!" : "DEFEAT";
+        CombatUI.SetCombatText(playerWon ? "VICTORY!" : "DEFEAT");
         if (playerWon)
         {
             playerAnimator.PlayAnimationTrigger("Player Victory");
@@ -139,9 +133,8 @@ public class CombatEncounter : MonoBehaviour
         }
         yield return new WaitForSeconds(ActionResultPause);
 
+        CombatUI.EndCombat();
         battleEndFeedback.PlayFeedbacks();
-        encounterLabel.gameObject.SetActive(false);
-        healthLabel.gameObject.SetActive(false);
         cameraFollow.ExitBattleView();
         playerController2D.SetControlLocked(false);
     }
@@ -175,7 +168,7 @@ public class CombatEncounter : MonoBehaviour
             }
 
             previousEnemyAttack = selectedAttack;
-            encounterLabel.text = $"{selectedAttack.DisplayName}\nDEFEND!";
+            CombatUI.SetCombatText($"{selectedAttack.DisplayName}\nDEFEND!");
             yield return new WaitForSeconds(ActionResultPause);
 
             foreach (CombatantAttackStrike strike in selectedAttack.Strikes)
@@ -222,10 +215,10 @@ public class CombatEncounter : MonoBehaviour
                 
                 int incomingDamage = GetIncomingDamage(defenseJudgement, strike.Damage);
                 playerCombatant.TakeDamage(incomingDamage);
-                encounterLabel.text = FormatResult(
+                CombatUI.SetCombatText(FormatResult(
                     defenseJudgement,
                     incomingDamage,
-                    "DAMAGE TAKEN");
+                    "DAMAGE TAKEN"));
                 UpdateHealthDisplay();
                 yield return WaitAfterStrike(strike);
 
@@ -248,9 +241,9 @@ public class CombatEncounter : MonoBehaviour
 
         while (true)
         {
-            encounterLabel.text = selection == PlayerBattleAction.Attack
+            CombatUI.SetCombatText(selection == PlayerBattleAction.Attack
                 ? "CHOOSE ACTION\n> ATTACK <    HEAL"
-                : "CHOOSE ACTION\n  ATTACK    > HEAL <";
+                : "CHOOSE ACTION\n  ATTACK    > HEAL <");
 
             if (WasLeftPressed() || WasRightPressed())
             {
@@ -278,7 +271,7 @@ public class CombatEncounter : MonoBehaviour
             yield break;
         }
 
-        encounterLabel.text = attack.DisplayName;
+        CombatUI.SetCombatText(attack.DisplayName);
         yield return new WaitForSeconds(IntroPause);
 
         foreach (CombatantAttackStrike strike in attack.Strikes)
@@ -319,7 +312,7 @@ public class CombatEncounter : MonoBehaviour
             playerAnimator.PlayAnimationTrigger("Player Attacking");
             int damage = GetAttackDamage(judgement, strike.Damage);
             enemyCombatant.TakeDamage(damage);
-            encounterLabel.text = FormatResult(judgement, damage, "DAMAGE");
+            CombatUI.SetCombatText(FormatResult(judgement, damage, "DAMAGE"));
             UpdateHealthDisplay();
 
             if(judgement == TimingJudgement.Perfect || judgement == TimingJudgement.Good)
@@ -355,7 +348,7 @@ public class CombatEncounter : MonoBehaviour
 
     private IEnumerator ResolvePlayerHeal()
     {
-        encounterLabel.text = "HEAL";
+        CombatUI.SetCombatText("HEAL");
         yield return new WaitForSeconds(IntroPause);
 
         battleBeforeActionFeedback.PlayFeedbacks();
@@ -379,7 +372,7 @@ public class CombatEncounter : MonoBehaviour
         int healthBefore = playerCombatant.CurrentHealth;
         playerCombatant.Heal(healAmount);
         int restoredHealth = playerCombatant.CurrentHealth - healthBefore;
-        encounterLabel.text = FormatResult(judgement, restoredHealth, "HP RESTORED");
+        CombatUI.SetCombatText(FormatResult(judgement, restoredHealth, "HP RESTORED"));
         UpdateHealthDisplay();
         yield return new WaitForSeconds(HealResultPause);
     }
@@ -388,7 +381,7 @@ public class CombatEncounter : MonoBehaviour
         CountdownPattern pattern,
         System.Action<TimingJudgement> captureResult)
     {
-        yield return countdown.Play(encounterLabel, pattern, captureResult);
+        yield return countdown.Play(pattern, captureResult);
     }
 
     private static WaitForSeconds WaitAfterStrike(CombatantAttackStrike strike)
@@ -419,10 +412,8 @@ public class CombatEncounter : MonoBehaviour
 
     private void UpdateHealthDisplay()
     {
-        healthLabel.text =
-            $"HERO  {playerCombatant.CurrentHealth}/{playerCombatant.MaxHealth}"
-            + $"\n{enemyProfile.DisplayName.ToUpper()} "
-            + $"{enemyCombatant.CurrentHealth}/{enemyCombatant.MaxHealth}";
+        CombatUI.SetPlayerHealth(playerCombatant.CurrentHealth);
+        CombatUI.SetEnemyHealth(enemyCombatant.CurrentHealth);
     }
 
     private static string FormatResult(TimingJudgement judgement, int damage, string damageLabel)
