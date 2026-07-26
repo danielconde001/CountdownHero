@@ -57,7 +57,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -111,21 +111,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8389521943841374630}
     m_Modifications:
+    - target: {fileID: 2772412946569434484, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
+      propertyPath: m_text
+      value: LEFT
+      objectReference: {fileID: 0}
     - target: {fileID: 3153870342805769524, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 93.14
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3153870342805769524, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 33.52
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3360066464045104613, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_Name
       value: LeftHealthBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 3360066464045104613, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4306556274535846305, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_Pivot.x
@@ -209,11 +209,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5479650584766593656, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 92.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5479650584766593656, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 33.52
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -235,19 +235,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3153870342805769524, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 93.14
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3153870342805769524, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 33.52
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3360066464045104613, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_Name
       value: RightHealthBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 3360066464045104613, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4306556274535846305, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_Pivot.x
@@ -331,11 +327,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5479650584766593656, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 92.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5479650584766593656, guid: 07c83fb746870e94782dee436d2d1222, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 33.52
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
