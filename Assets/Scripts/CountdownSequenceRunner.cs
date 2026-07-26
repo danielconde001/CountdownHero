@@ -22,22 +22,21 @@ public class CountdownSequenceRunner : MonoBehaviour
     [SerializeField] private MMSoundManagerPlayOptions mmSoundManagerPlayOptions;
     [SerializeField] private AudioClip tickAudioClip;
     [SerializeField] private AudioClip tockAudioClip;
+    [SerializeField] private AudioClip bellAudioClip;
 
     private bool isUsingTick = false;
 
     public IEnumerator Play(
-        TextMesh display,
         CountdownPattern pattern,
         Action<TimingJudgement> onFinished)
     {
-        if (display == null || pattern == null || onFinished == null)
+        if (pattern == null || onFinished == null)
         {
             Debug.LogError("A countdown requires a display, pattern, and completion callback.");
             onFinished?.Invoke(TimingJudgement.Miss);
             yield break;
         }
-
-        TextMeshFontUtility.ApplyFontMaterial(display);
+        
         yield return WaitForActionRelease();
 
         isUsingTick = false;
@@ -46,7 +45,6 @@ public class CountdownSequenceRunner : MonoBehaviour
         {
             if(isUsingTick == false)
             {
-                Debug.Log("ass");
                 MMSoundManager.Current.PlaySound(tickAudioClip, mmSoundManagerPlayOptions);
                 isUsingTick = true;
             }
@@ -56,7 +54,7 @@ public class CountdownSequenceRunner : MonoBehaviour
                 isUsingTick = false;
             }
             
-            display.text = beat.Text;
+            CombatUI.SetCombatText(beat.Text);
             for (float elapsed = 0f; elapsed < beat.Duration; elapsed += Time.deltaTime)
             {
                 if (WasActionPressed())
@@ -69,7 +67,9 @@ public class CountdownSequenceRunner : MonoBehaviour
             }
         }
 
-        display.text = "GO!";
+        CombatUI.SetCombatText("GO!");
+        MMSoundManager.Current.PlaySound(bellAudioClip, mmSoundManagerPlayOptions);
+
         for (float goElapsed = 0f; goElapsed < pattern.InputWindow; goElapsed += Time.deltaTime)
         {
             if (WasActionPressed())
