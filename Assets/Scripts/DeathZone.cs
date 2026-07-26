@@ -25,6 +25,8 @@ public class DeathZone : MonoBehaviour
 
         if (reloadSceneIfNoRespawn)
         {
+            other.gameObject.SetActive(false);
+            Instantiate(Resources.Load<GameObject>("VFX/Platform Poof VFX"), other.transform.position, Quaternion.identity);
             other.GetComponent<PlayerAnimator>().PlayAnimationTrigger("Player Death");
             Scene activeScene = SceneManager.GetActiveScene();
             string sceneToReload = string.IsNullOrEmpty(activeScene.path)
