@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d3c8373cda4732a6214df6868ab8db, type: 3}
   m_Name: Witch Battle Profile
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBattleProfile
-  displayName: Training Enemy
+  displayName: Witch
   maxHealth: 20
   attacks:
   - {fileID: 11400000, guid: 81bb3480e8e89c443a3b4393de24ff13, type: 2}
   - {fileID: 11400000, guid: 4bc2686e8fee96a4b97aaa016bcae484, type: 2}
+  - {fileID: 11400000, guid: 5142ef665285a5e4c861263368bb74d9, type: 2}

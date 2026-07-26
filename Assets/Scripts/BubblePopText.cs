@@ -18,6 +18,7 @@ public sealed class BubblePopText : MonoBehaviour
     [SerializeField, Min(0f)] private float delay;
     [SerializeField, Min(0f)] private float disableAfterSeconds;
     [SerializeField] private bool loadNextSceneOnComplete;
+    [SerializeField] private bool loadToMainMenu;
 
     [Header("Bubble Pop")]
     [SerializeField, Min(0.01f)] private float popDuration = 0.22f;
@@ -143,7 +144,14 @@ public sealed class BubblePopText : MonoBehaviour
 
         if (loadNextSceneOnComplete)
         {
-            LoadNextScene();
+            if (loadToMainMenu)
+            {
+                SceneManager.LoadScene(0);
+            }
+            else
+            {
+                LoadNextScene();
+            }
             yield break;
         }
 

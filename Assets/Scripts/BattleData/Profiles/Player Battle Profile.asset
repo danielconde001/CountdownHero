@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBattleProfile
   attack: {fileID: 11400000, guid: 9de2ee5dbfe87234d9f9f0c327568b9e, type: 2}
   healPattern: {fileID: 11400000, guid: 36fa5d0d3b894acba0d6690666b3564a, type: 2}
-  perfectHealAmount: 3
-  goodHealAmount: 2
+  perfectHealAmount: 5
+  goodHealAmount: 3

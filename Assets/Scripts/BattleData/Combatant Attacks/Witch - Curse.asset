@@ -16,5 +16,5 @@ MonoBehaviour:
   selectionWeight: 1
   strikes:
   - countdownPattern: {fileID: 11400000, guid: 7b890eb811d0b8f44b197e151c3c7895, type: 2}
-    damage: 1
-    delayAfter: 0.15
+    damage: 2
+    delayAfter: 0

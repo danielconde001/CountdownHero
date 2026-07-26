@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d3c8373cda4732a6214df6868ab8db, type: 3}
   m_Name: Lycan Battle Profile
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBattleProfile
-  displayName: Training Enemy
+  displayName: Lycan
   maxHealth: 16
   attacks:
   - {fileID: 11400000, guid: 51f8e094d5f518f43bb5e8657c9d9dd1, type: 2}
+  - {fileID: 11400000, guid: af33d9b0af4d0b74c8ff07ff63fea988, type: 2}

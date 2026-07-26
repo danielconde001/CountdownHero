@@ -212,6 +212,7 @@ MonoBehaviour:
   delay: 4
   disableAfterSeconds: 2
   loadNextSceneOnComplete: 0
+  loadToMainMenu: 0
   popDuration: 0.22
   settleDuration: 0.08
   hiddenAlpha: 0
@@ -333,6 +334,7 @@ MonoBehaviour:
   delay: 7
   disableAfterSeconds: 3
   loadNextSceneOnComplete: 0
+  loadToMainMenu: 0
   popDuration: 0.22
   settleDuration: 0.08
   hiddenAlpha: 0
@@ -454,6 +456,7 @@ MonoBehaviour:
   delay: 15
   disableAfterSeconds: 3
   loadNextSceneOnComplete: 1
+  loadToMainMenu: 1
   popDuration: 0.22
   settleDuration: 0.08
   hiddenAlpha: 0
@@ -575,6 +578,7 @@ MonoBehaviour:
   delay: 11
   disableAfterSeconds: 3
   loadNextSceneOnComplete: 1
+  loadToMainMenu: 0
   popDuration: 0.22
   settleDuration: 0.08
   hiddenAlpha: 0
@@ -925,6 +929,7 @@ MonoBehaviour:
   delay: 3
   disableAfterSeconds: 3
   loadNextSceneOnComplete: 0
+  loadToMainMenu: 0
   popDuration: 0.22
   settleDuration: 0.08
   hiddenAlpha: 0

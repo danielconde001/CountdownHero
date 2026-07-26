@@ -18,11 +18,11 @@ MonoBehaviour:
   - text: 4
     duration: 0.9
   - text: 3
-    duration: 0.2
+    duration: 0.1
   - text: 2
-    duration: 0.2
+    duration: 0.1
   - text: 1
-    duration: 0.3
+    duration: 0.1
   perfectWindow: 0.2
   goodWindow: 0.5
   inputWindow: 0.6

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d3c8373cda4732a6214df6868ab8db, type: 3}
   m_Name: Skeleton Battle Profile
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBattleProfile
-  displayName: Training Enemy
+  displayName: Skelington
   maxHealth: 6
   attacks:
   - {fileID: 11400000, guid: 8cce8b6e8a822af4e919335bc119a99f, type: 2}

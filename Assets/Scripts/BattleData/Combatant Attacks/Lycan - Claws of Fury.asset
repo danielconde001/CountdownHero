@@ -16,11 +16,11 @@ MonoBehaviour:
   selectionWeight: 1
   strikes:
   - countdownPattern: {fileID: 11400000, guid: 9ca313e636f216a47bc2ad2e02a7a8be, type: 2}
-    damage: 1
+    damage: 2
     delayAfter: 0.15
   - countdownPattern: {fileID: 11400000, guid: df323515888546f459c00446e48c8890, type: 2}
-    damage: 1
+    damage: 2
     delayAfter: 0.15
   - countdownPattern: {fileID: 11400000, guid: 6efa5351204a2104f8e55bf252c02d36, type: 2}
-    damage: 1
+    damage: 2
     delayAfter: 0
