@@ -69,6 +69,7 @@ public class InputPromptDatabase : ScriptableObject
     public void Refresh() => BuildLookup();
 
 
+    #if UNITY_EDITOR
     public static InputPromptDatabase GetDataBase()
     {
         string[] guids = AssetDatabase.FindAssets("t:InputPromptDatabase");
@@ -81,4 +82,5 @@ public class InputPromptDatabase : ScriptableObject
 
         return null;
     }
+    #endif
 }
