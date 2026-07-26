@@ -1,8 +1,7 @@
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
+using DG.Tweening;
 
 public class HealthBar : MonoBehaviour
 {
@@ -15,6 +14,7 @@ public class HealthBar : MonoBehaviour
 
 
     private float _currentHealth;
+    private float _maxHealth;
 
     private Tween _barTween;
     private Tween _textTween;
@@ -26,26 +26,27 @@ public class HealthBar : MonoBehaviour
         _textTween?.Kill();
     }
 
-    public void SetHealth(string title, float curHealth, float maxHealth)
+    public void Setup(string title, float curHealth, float maxHealth)
     {
-        _titleText.text = title;
+        _titleText.text = title.ToUpper();
 
-        if (!this.gameObject.activeInHierarchy)
-        {
-            _currentHealth = curHealth;
-            _barFill.fillAmount = curHealth / maxHealth;
-            _valueText.text = $"{Mathf.RoundToInt(curHealth)} / {Mathf.RoundToInt(maxHealth)}";
-            return;
-        }
+        _currentHealth = curHealth;
+        _maxHealth = maxHealth;
 
-        maxHealth = Mathf.Max(1, maxHealth);
-        curHealth = Mathf.Clamp(curHealth, 0, maxHealth);
+        _barFill.fillAmount = curHealth / maxHealth;
+        _valueText.text = $"{Mathf.RoundToInt(curHealth)} / {Mathf.RoundToInt(maxHealth)}";
+    }
+
+
+    public void SetHealth(float curHealth)
+    {
+        curHealth = Mathf.Clamp(curHealth, 0, _maxHealth);
 
         float previousHealth = _currentHealth;
         _currentHealth = curHealth;
 
-        float previousFill = previousHealth / maxHealth;
-        float targetFill = curHealth / maxHealth;
+        float previousFill = previousHealth / _maxHealth;
+        float targetFill = curHealth / _maxHealth;
 
         // Kill previous tweens if health changes again mid-animation
         _barTween?.Kill();
@@ -56,7 +57,19 @@ public class HealthBar : MonoBehaviour
 
         // Tween the displayed health number
         _textTween = DOTween.To(() => previousHealth, value => 
-            { int displayHealth = Mathf.RoundToInt(value); _valueText.text = $"{displayHealth} / {Mathf.RoundToInt(maxHealth)}"; }
+            { int displayHealth = Mathf.RoundToInt(value); _valueText.text = $"{displayHealth} / {Mathf.RoundToInt(_maxHealth)}"; }
             , curHealth, _tweenDuration);
+    }
+
+
+    public void Clear()
+    {
+        _titleText.text = string.Empty;
+
+        _currentHealth = 0;
+        _maxHealth = 0;
+
+        _barFill.fillAmount = 0;
+        _valueText.text = string.Empty;
     }
 }
