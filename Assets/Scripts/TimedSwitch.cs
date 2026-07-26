@@ -228,13 +228,22 @@ public class TimedSwitch : MonoBehaviour
             return;
         }
 
+        bool activatedAnyTarget = false;
         foreach (SwitchTarget target in targets)
         {
             if (target != null)
             {
                 target.Activate();
+                activatedAnyTarget = true;
             }
         }
+
+        if (!activatedAnyTarget)
+        {
+            return;
+        }
+
+        AudioManager.Instance.PlayLeverSwitch();
 
         RefreshCubeLeverVisual();
         RefreshInteractPrompt();
