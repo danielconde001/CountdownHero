@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Lycan Battle Profile
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBattleProfile
   displayName: Training Enemy
-  maxHealth: 6
+  maxHealth: 16
   attacks:
   - {fileID: 11400000, guid: 51f8e094d5f518f43bb5e8657c9d9dd1, type: 2}

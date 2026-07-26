@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OrcZ Battle Profile
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBattleProfile
   displayName: Training Enemy
-  maxHealth: 6
+  maxHealth: 12
   attacks:
   - {fileID: 11400000, guid: 223ba752fe783184a9fd9fbd77619894, type: 2}
   - {fileID: 11400000, guid: 5004d01bbe925bc4794775e3ca97388b, type: 2}
