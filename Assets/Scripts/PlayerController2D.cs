@@ -136,7 +136,7 @@ public class PlayerController2D : MonoBehaviour
         groundFilter.SetLayerMask(groundLayerMask);
         groundFilter.useTriggers = false;
 
-        IsFacingLeft = true;
+        IsFacingLeft = false;
     }
 
     private void OnEnable()
