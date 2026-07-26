@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class CombatUI : MonoBehaviour
@@ -12,6 +13,10 @@ public class CombatUI : MonoBehaviour
     [Space(10)]
     [SerializeField] private HealthBar _leftHealthbar;
     [SerializeField] private HealthBar _rightHealthbar;
+
+    [Space(10)]
+    [SerializeField] private Image _confirmPrompt;
+    [SerializeField] private Image _goPrompt;
 
 
     private HealthBar _playerHealthbar;
@@ -139,6 +144,23 @@ public class CombatUI : MonoBehaviour
         _instance._enemyHealthbar.SetHealth(health);
     }
 
+    public static void SetShowConfirmPrompt(bool show)
+    {
+        if (!CheckCanSet())
+            return;
+
+        _instance._confirmPrompt.gameObject.SetActive(show);
+    }
+
+    public static void SetShowGoPrompt(bool show)
+    {
+        if (!CheckCanSet())
+            return;
+
+        _instance._goPrompt.gameObject.SetActive(show);
+    }
+
+
 
     public static void EndCombat()
     {
@@ -154,6 +176,9 @@ public class CombatUI : MonoBehaviour
         _instance._rightHealthbar.Clear();
 
         _instance.ShowTween(false);
+
+        SetShowConfirmPrompt(false);
+        SetShowGoPrompt(false);
 
         _instance._inCombat = false;
     }
