@@ -50,6 +50,8 @@ public class CombatEncounter : MonoBehaviour
     [SerializeField] private MMF_Player battleEnemyAttackFeedback;
     [SerializeField] private MMF_Player battlePlayerDefendFeedback;
     [SerializeField] private MMF_Player battlePlayerHealFeedback;
+    [SerializeField] private MMF_Player battleVictoryFeedback;
+    [SerializeField] private MMF_Player battleLoseFeedback;
     [SerializeField] private MMF_Player battleEndFeedback;
 
     private bool hasStarted;
@@ -130,10 +132,12 @@ public class CombatEncounter : MonoBehaviour
         CombatUI.SetCombatText(playerWon ? "VICTORY!" : "DEFEAT");
         if (playerWon)
         {
+            battleVictoryFeedback.PlayFeedbacks();
             playerAnimator.PlayAnimationTrigger("Player Victory");
         }
         else
         {
+            battleLoseFeedback.PlayFeedbacks();
             playerAnimator.PlayAnimationTrigger("Player Death");
             FadeManager.ShowFade(() => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
 
