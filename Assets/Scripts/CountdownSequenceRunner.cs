@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -18,6 +19,12 @@ public enum TimingJudgement
 /// </summary>
 public class CountdownSequenceRunner : MonoBehaviour
 {
+    [SerializeField] private MMSoundManagerPlayOptions mmSoundManagerPlayOptions;
+    [SerializeField] private AudioClip tickAudioClip;
+    [SerializeField] private AudioClip tockAudioClip;
+
+    private bool isUsingTick = false;
+
     public IEnumerator Play(
         TextMesh display,
         CountdownPattern pattern,
@@ -33,8 +40,22 @@ public class CountdownSequenceRunner : MonoBehaviour
         TextMeshFontUtility.ApplyFontMaterial(display);
         yield return WaitForActionRelease();
 
+        isUsingTick = false;
+
         foreach (CountdownBeat beat in pattern.Beats)
         {
+            if(isUsingTick == false)
+            {
+                Debug.Log("ass");
+                MMSoundManager.Current.PlaySound(tickAudioClip, mmSoundManagerPlayOptions);
+                isUsingTick = true;
+            }
+            else
+            {
+                MMSoundManager.Current.PlaySound(tockAudioClip, mmSoundManagerPlayOptions);
+                isUsingTick = false;
+            }
+            
             display.text = beat.Text;
             for (float elapsed = 0f; elapsed < beat.Duration; elapsed += Time.deltaTime)
             {

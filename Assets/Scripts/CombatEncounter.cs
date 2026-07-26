@@ -1,5 +1,6 @@
 using System.Collections;
 using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -38,6 +39,7 @@ public class CombatEncounter : MonoBehaviour
     [SerializeField] private float attackDuration;
 
     [Header("Feedback")]
+    [SerializeField] private MMSoundManager mmSoundManager;
     [SerializeField] private MMF_Player battleStartFeedback;
     [SerializeField] private MMF_Player battleBeforeActionFeedback;
     [SerializeField] private MMF_Player battlePlayerAttackFeedback;
