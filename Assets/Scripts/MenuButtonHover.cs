@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 /// Adds a punchy hover animation and hover sound to UI buttons.
 /// </summary>
 [DisallowMultipleComponent]
-public sealed class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public sealed class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     [SerializeField] private bool animateOnEnable = true;
     [SerializeField, Min(0f)] private float introDelay = 2f;
@@ -25,6 +25,7 @@ public sealed class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPoin
     private Vector2 restingAnchoredPosition;
     private Vector2 hiddenAnchoredPosition;
     private Coroutine activeRoutine;
+    private bool highlighted;
 
     private void Awake()
     {
@@ -46,17 +47,39 @@ public sealed class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPoin
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (hoverClip != null)
-        {
-            AudioManager.Instance.PlayOneShot(hoverClip, hoverPitch, 1f);
-        }
-
-        PlayRoutine(HoverRoutine(true));
+        SetHighlighted(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        PlayRoutine(HoverRoutine(false));
+        SetHighlighted(false);
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        SetHighlighted(true);
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        SetHighlighted(false);
+    }
+
+    private void SetHighlighted(bool value)
+    {
+        if (highlighted == value)
+        {
+            return;
+        }
+
+        highlighted = value;
+
+        if (highlighted && hoverClip != null)
+        {
+            AudioManager.Instance.PlayOneShot(hoverClip, hoverPitch, 1f);
+        }
+
+        PlayRoutine(HoverRoutine(highlighted));
     }
 
     private IEnumerator HoverRoutine(bool hovered)
