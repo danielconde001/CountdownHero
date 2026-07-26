@@ -70,6 +70,8 @@ public class CountdownSequenceRunner : MonoBehaviour
         }
 
         CombatUI.SetCombatText("GO!");
+        CombatUI.SetShowGoPrompt(true);
+
         MMSoundManager.Current.PlaySound(bellAudioClip, mmSoundManagerPlayOptions);
 
         for (float goElapsed = 0f; goElapsed < pattern.InputWindow; goElapsed += Time.deltaTime)
