@@ -531,7 +531,7 @@ PrefabInstance:
       objectReference: {fileID: 1932178173}
     - target: {fileID: 2167749094429823924, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
       propertyPath: m_Name
-      value: Combat Encounter
+      value: Skeleton Combat Encounter
       objectReference: {fileID: 0}
     - target: {fileID: 4075678909884083289, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
       propertyPath: m_LocalPosition.x

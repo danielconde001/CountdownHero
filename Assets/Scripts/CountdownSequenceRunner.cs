@@ -10,7 +10,8 @@ public enum TimingJudgement
     Perfect,
     Good,
     Miss,
-    TooEarly
+    TooEarly,
+    TooLate
 }
 
 /// <summary>
@@ -19,6 +20,7 @@ public enum TimingJudgement
 /// </summary>
 public class CountdownSequenceRunner : MonoBehaviour
 {
+    [SerializeField] private InputActionReference confirmInputActionRef;
     [SerializeField] private MMSoundManagerPlayOptions mmSoundManagerPlayOptions;
     [SerializeField] private AudioClip tickAudioClip;
     [SerializeField] private AudioClip tockAudioClip;
@@ -72,13 +74,14 @@ public class CountdownSequenceRunner : MonoBehaviour
 
         for (float goElapsed = 0f; goElapsed < pattern.InputWindow; goElapsed += Time.deltaTime)
         {
+
             if (WasActionPressed())
             {
                 TimingJudgement judgement = goElapsed <= pattern.PerfectWindow
                     ? TimingJudgement.Perfect
                     : goElapsed <= pattern.GoodWindow
                         ? TimingJudgement.Good
-                        : TimingJudgement.Miss;
+                        : TimingJudgement.TooLate;
                 onFinished(judgement);
                 yield break;
             }
@@ -89,7 +92,7 @@ public class CountdownSequenceRunner : MonoBehaviour
         onFinished(TimingJudgement.Miss);
     }
 
-    private static IEnumerator WaitForActionRelease()
+    private IEnumerator WaitForActionRelease()
     {
         while (IsActionHeld())
         {
@@ -97,20 +100,14 @@ public class CountdownSequenceRunner : MonoBehaviour
         }
     }
 
-    private static bool WasActionPressed()
+    private bool WasActionPressed()
     {
-        bool spacePressed = Keyboard.current != null
-            && Keyboard.current.spaceKey.wasPressedThisFrame;
-        bool mousePressed = Mouse.current != null
-            && Mouse.current.leftButton.wasPressedThisFrame;
-        return spacePressed || mousePressed;
+        return confirmInputActionRef.action.WasPressedThisFrame();
     }
 
-    private static bool IsActionHeld()
+    private bool IsActionHeld()
     {
-        bool spaceHeld = Keyboard.current != null && Keyboard.current.spaceKey.isPressed;
-        bool mouseHeld = Mouse.current != null && Mouse.current.leftButton.isPressed;
-        return spaceHeld || mouseHeld;
+        return confirmInputActionRef.action.IsPressed();
     }
 }
 

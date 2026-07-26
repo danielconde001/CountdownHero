@@ -16,6 +16,11 @@ public class CombatEncounter : MonoBehaviour
     private const float HealResultPause = 1.0f;
     private const float BattleCameraHeight = 1.25f;
 
+    [Header("Input")]
+    [SerializeField] private InputActionReference confirmInputActionRef;
+    [SerializeField] private InputActionReference navigateLeftInputActionRef;
+    [SerializeField] private InputActionReference navigateRightInputActionRef;
+
     [Header("Systems and battle data")]
     [SerializeField] private PrototypeCameraFollow cameraFollow;
     [SerializeField] private CountdownSequenceRunner countdown;
@@ -184,6 +189,12 @@ public class CombatEncounter : MonoBehaviour
 
                 switch(defenseJudgement)
                 {
+                    case TimingJudgement.TooLate:
+                    {
+                        battleEnemyAttackFeedback.PlayFeedbacks();
+                        playerAnimator.PlayAnimationTrigger("Player Take Hit");
+                        break;
+                    }
                     case TimingJudgement.TooEarly:
                     {
                         battleEnemyAttackFeedback.PlayFeedbacks();
@@ -196,7 +207,6 @@ public class CombatEncounter : MonoBehaviour
                         playerAnimator.PlayAnimationTrigger("Player Take Hit");
                         break;
                     }
-
                     case TimingJudgement.Good:
                     {
                         battlePlayerDefendFeedback.PlayFeedbacks();
@@ -302,6 +312,11 @@ public class CombatEncounter : MonoBehaviour
                     break;
                 }
                 case TimingJudgement.TooEarly:
+                {
+                    battlePlayerMissFeedback.PlayFeedbacks();
+                    break;
+                }
+                case TimingJudgement.TooLate:
                 {
                     battlePlayerMissFeedback.PlayFeedbacks();
                     break;
@@ -428,38 +443,29 @@ public class CombatEncounter : MonoBehaviour
             TimingJudgement.Perfect => "PERFECT!",
             TimingJudgement.Good => "GOOD!",
             TimingJudgement.TooEarly => "TOO EARLY!",
+            TimingJudgement.TooLate => "TOO LATE!",
             _ => "MISS!"
         };
     }
 
-    private static bool WasLeftPressed()
+    private bool WasLeftPressed()
     {
-        return Keyboard.current != null
-            && (Keyboard.current.aKey.wasPressedThisFrame
-                || Keyboard.current.leftArrowKey.wasPressedThisFrame);
+        return navigateLeftInputActionRef.action.WasPressedThisFrame();
     }
 
-    private static bool WasRightPressed()
+    private bool WasRightPressed()
     {
-        return Keyboard.current != null
-            && (Keyboard.current.dKey.wasPressedThisFrame
-                || Keyboard.current.rightArrowKey.wasPressedThisFrame);
+        return navigateRightInputActionRef.action.WasPressedThisFrame();
     }
 
-    private static bool WasConfirmPressed()
+    private bool WasConfirmPressed()
     {
-        bool space = Keyboard.current != null
-            && Keyboard.current.spaceKey.wasPressedThisFrame;
-        bool mouse = Mouse.current != null
-            && Mouse.current.leftButton.wasPressedThisFrame;
-        return space || mouse;
+        return confirmInputActionRef.action.WasPressedThisFrame();
     }
 
-    private static bool IsConfirmHeld()
+    private bool IsConfirmHeld()
     {
-        bool space = Keyboard.current != null && Keyboard.current.spaceKey.isPressed;
-        bool mouse = Mouse.current != null && Mouse.current.leftButton.isPressed;
-        return space || mouse;
+        return confirmInputActionRef.action.IsPressed();
     }
 
     private IEnumerator MoveToBattlePositions(Transform player)

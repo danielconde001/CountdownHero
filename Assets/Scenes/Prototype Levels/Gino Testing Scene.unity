@@ -1133,6 +1133,18 @@ PrefabInstance:
       propertyPath: playerCombatant
       value: 
       objectReference: {fileID: 952835788}
+    - target: {fileID: 497044714236618675, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
+      propertyPath: confirmInputActionRef
+      value: 
+      objectReference: {fileID: 392368643174621059, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 497044714236618675, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
+      propertyPath: navigateLeftInputActionRef
+      value: 
+      objectReference: {fileID: -7070191615200641008, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    - target: {fileID: 497044714236618675, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
+      propertyPath: navigateRightInputActionRef
+      value: 
+      objectReference: {fileID: 3448273405049081231, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 968951816195723446, guid: cb029c7d33697dd4792430961023a9a1, type: 3}
       propertyPath: managedReferences[1055307444534379250].TargetShaker
       value: 
