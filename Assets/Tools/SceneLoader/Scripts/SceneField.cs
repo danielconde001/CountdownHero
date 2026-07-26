@@ -6,7 +6,7 @@ using UnityEditor;
 #endif
 
 [System.Serializable]
-public class SceneField
+public sealed class SceneField
 {
 #if UNITY_EDITOR
     [SerializeField] private SceneAsset _scene;
@@ -14,8 +14,9 @@ public class SceneField
 
     [HideInInspector][SerializeField] private string _sceneName;
 
-    public static implicit operator string(SceneField sceneField) => sceneField._sceneName;
+    public bool IsAssigned => !string.IsNullOrWhiteSpace(_sceneName);
 
+    public static implicit operator string(SceneField sceneField) => sceneField?._sceneName;
 
     public void Load() => FadeManager.ShowFade(() => SceneManager.LoadScene(_sceneName, LoadSceneMode.Single));
     public void LoadAdditive() => SceneManager.LoadScene(_sceneName, LoadSceneMode.Additive);

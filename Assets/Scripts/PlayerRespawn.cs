@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Tracks the player's current respawn point and moves them back there after hazards.
@@ -39,8 +38,11 @@ public class PlayerRespawn : MonoBehaviour
             body.angularVelocity = 0f;
             body.position = currentCheckpointPosition;
         }
+        else
+        {
+            transform.position = currentCheckpointPosition;
+        }
 
-        transform.position = currentCheckpointPosition;
         Physics2D.SyncTransforms();
     }
 }

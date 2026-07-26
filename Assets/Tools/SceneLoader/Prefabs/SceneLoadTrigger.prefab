@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5817784700382485847}
   - component: {fileID: 8694510282570589286}
   - component: {fileID: 8599929496727803721}
+  - component: {fileID: 596015773}
   m_Layer: 0
   m_Name: SceneLoadTrigger
   m_TagString: Untagged
@@ -94,5 +95,27 @@ MonoBehaviour:
   _sceneToLoad:
     _scene: {fileID: 0}
     _sceneName: 
-  _transfrom: {fileID: 5817784700382485847}
-  _boxCollider: {fileID: 8694510282570589286}
+--- !u!114 &596015773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677038767598506077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de4954a34657ddf49af9995000798498, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::HoldQLevelSkip
+  holdDuration: 1.75
+  warningDuration: 2
+  warningText: Skill Issue
+  warningColor: {r: 1, g: 0, b: 0, a: 1}
+  bigJohnFont: {fileID: 12800000, guid: 3258cbeb41f23b545a323883d7b047b9, type: 3}
+  toBeContinuedClip: {fileID: 8300000, guid: dc672c4fafd2185438c276d284d4748e, type: 3}
+  sceneLoadTrigger: {fileID: 8599929496727803721}
+  skipPromptPrefab: {fileID: 5425822363961659518, guid: ee0da376d4bb60d48969fb2e018d222d, type: 3}
+  promptFadeInDuration: 0.2
+  promptFadeOutDuration: 0.2
+  promptVisibleDuration: 2
+  deathsBeforePrompt: 5
