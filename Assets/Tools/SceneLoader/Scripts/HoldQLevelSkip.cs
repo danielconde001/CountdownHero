@@ -14,6 +14,7 @@ public sealed class HoldQLevelSkip : MonoBehaviour
     private const string PlatformingScenePrefix = "Platforming";
 
     [Header("Skip")]
+    [SerializeField] private InputActionReference _skipActionRef;
     [SerializeField, Min(0f)] private float holdDuration = 1.75f;
     [SerializeField, Min(0f)] private float warningDuration = 2f;
     [SerializeField] private string warningText = "Skill Issue";
@@ -90,7 +91,7 @@ public sealed class HoldQLevelSkip : MonoBehaviour
             return;
         }
 
-        if (Keyboard.current?.qKey.isPressed != true)
+        if (_skipActionRef.action.IsPressed() != true)
         {
             holdTime = 0f;
             return;

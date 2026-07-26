@@ -113,8 +113,10 @@ public class CombatEncounter : MonoBehaviour
         playerCombatant.ResetHealth();
         enemyCombatant.Configure(enemyProfile.MaxHealth);
         previousEnemyAttack = null;
-        UpdateHealthDisplay();
+
         CombatUI.SetupCombat(this, "Hero", playerCombatant.CurrentHealth, playerCombatant.MaxHealth, enemyProfile.DisplayName, enemyCombatant.CurrentHealth, enemyCombatant.MaxHealth);
+
+        UpdateHealthDisplay();
 
         CombatUI.SetCombatText("ENCOUNTER!");
 
@@ -149,7 +151,10 @@ public class CombatEncounter : MonoBehaviour
         while (!playerCombatant.IsDefeated && !enemyCombatant.IsDefeated)
         {
             PlayerBattleAction selectedAction = PlayerBattleAction.Attack;
+
             yield return ChoosePlayerAction(action => selectedAction = action);
+
+            CombatUI.SetShowConfirmPrompt(false);
 
             if (selectedAction == PlayerBattleAction.Attack)
             {
@@ -248,6 +253,8 @@ public class CombatEncounter : MonoBehaviour
         {
             yield return null;
         }
+
+        CombatUI.SetShowConfirmPrompt(true);
 
         while (true)
         {
@@ -397,6 +404,8 @@ public class CombatEncounter : MonoBehaviour
         System.Action<TimingJudgement> captureResult)
     {
         yield return countdown.Play(pattern, captureResult);
+
+        CombatUI.SetShowGoPrompt(false);
     }
 
     private static WaitForSeconds WaitAfterStrike(CombatantAttackStrike strike)
