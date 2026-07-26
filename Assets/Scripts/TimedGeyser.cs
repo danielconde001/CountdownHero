@@ -7,9 +7,11 @@ using UnityEngine.Serialization;
 /// A switch-activated launcher. Entering its trigger while active replaces the
 /// player's velocity once; leaving and re-entering allows another launch.
 /// </summary>
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class TimedGeyser : SwitchTarget
 {
+    private const string WindVfxResourcePath = "VFX/Geyser Wind VFX";
+
     [Header("Timing")]
     [SerializeField, Min(0f)] private float countdownDuration = 1f;
     [SerializeField, Min(0f)] private float activeDuration = 3f;
@@ -19,19 +21,24 @@ public class TimedGeyser : SwitchTarget
     [SerializeField, Min(0f)] private float launchSpeed = 18f;
 
     [Header("Feedback")]
+    [Tooltip("Uses the reusable layered paper-wind effect instead of the legacy block visual.")]
+    [SerializeField] private bool useStylizedWindVisual = true;
     [SerializeField] private GameObject activeVisual;
     [SerializeField] private TextMesh countdownDisplay;
     [SerializeField] private UnityEvent onActivated = new UnityEvent();
     [SerializeField] private UnityEvent onDeactivated = new UnityEvent();
 
     private Coroutine sequenceRoutine;
+    private GeyserWindVFX windVfx;
     private bool isActive;
 
     public override bool IsActivationRunning => sequenceRoutine != null;
 
     private void Awake()
     {
-        GetComponent<Collider2D>().isTrigger = true;
+        BoxCollider2D launchZone = GetComponent<BoxCollider2D>();
+        launchZone.isTrigger = true;
+        EnsureWindVisual(launchZone);
         TextMeshFontUtility.ApplyFontMaterial(countdownDisplay);
         ResetState();
     }
@@ -52,6 +59,11 @@ public class TimedGeyser : SwitchTarget
     {
         if (sequenceRoutine == null)
         {
+            if (windVfx != null && windVfx.IsReady)
+            {
+                windVfx.BeginCharge(countdownDuration);
+            }
+
             sequenceRoutine = StartCoroutine(RunSequence());
         }
     }
@@ -133,9 +145,56 @@ public class TimedGeyser : SwitchTarget
     private void SetActive(bool active)
     {
         isActive = active;
+
+        bool hasStylizedWind = windVfx != null && windVfx.IsReady;
+        if (hasStylizedWind)
+        {
+            windVfx.SetWindActive(active);
+        }
+
         if (activeVisual != null)
         {
-            activeVisual.SetActive(active);
+            // Existing scenes still serialize the old cube placeholder. Keep it
+            // available as a fallback, but do not draw it over the new effect.
+            activeVisual.SetActive(active && !hasStylizedWind);
+        }
+    }
+
+    private void EnsureWindVisual(BoxCollider2D launchZone)
+    {
+        if (!useStylizedWindVisual)
+        {
+            return;
+        }
+
+        windVfx = GetComponentInChildren<GeyserWindVFX>(true);
+        if (windVfx == null)
+        {
+            GameObject template =
+                Resources.Load<GameObject>(WindVfxResourcePath);
+            if (template != null)
+            {
+                GameObject instance = Instantiate(template, transform, false);
+                instance.name = template.name;
+                windVfx = instance.GetComponent<GeyserWindVFX>();
+
+                if (windVfx == null)
+                {
+                    Destroy(instance);
+                }
+            }
+
+            if (windVfx == null)
+            {
+                // The fallback keeps geysers functional if the presentation
+                // prefab is accidentally moved out of Resources.
+                windVfx = gameObject.AddComponent<GeyserWindVFX>();
+            }
+        }
+
+        if (windVfx != null)
+        {
+            windVfx.Configure(launchZone);
         }
     }
 

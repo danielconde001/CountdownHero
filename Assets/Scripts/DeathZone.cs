@@ -25,6 +25,7 @@ public class DeathZone : MonoBehaviour
 
         if (reloadSceneIfNoRespawn)
         {
+            other.gameObject.SetActive(false);
             Scene activeScene = SceneManager.GetActiveScene();
             string sceneToReload = string.IsNullOrEmpty(activeScene.path)
                 ? activeScene.name

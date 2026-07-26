@@ -8,7 +8,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class PrototypeGeyserBuilder
 {
-    private const string ScenePath = "Assets/Scenes/PrototypeMovement.unity";
+    private const string ScenePath =
+        "Assets/Scenes/Prototype Levels/PrototypeMovement.unity";
     private const string SectionName = "Prototype Geyser Section";
 
     [MenuItem("Countdown Hero/Build Prototype Geyser")]
@@ -65,21 +66,14 @@ public static class PrototypeGeyserBuilder
         Object.DestroyImmediate(baseVisual.GetComponent<Collider>());
         baseVisual.GetComponent<MeshRenderer>().sharedMaterial = material;
 
-        GameObject blastVisual = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        blastVisual.name = "Geyser Blast";
-        blastVisual.transform.SetParent(geyserObject.transform, false);
-        blastVisual.transform.localPosition = new Vector3(0f, 2.75f, 0.15f);
-        blastVisual.transform.localScale = new Vector3(0.8f, 5.5f, 0.45f);
-        Object.DestroyImmediate(blastVisual.GetComponent<Collider>());
-        blastVisual.GetComponent<MeshRenderer>().sharedMaterial = material;
-        blastVisual.SetActive(false);
-
         TextMesh countdown = CreateLabel(geyserObject.transform, string.Empty,
             new Vector3(41.1f, -0.5f, -0.7f), 0.18f,
             new Color(1f, 0.9f, 0.25f));
 
+        // TimedGeyser loads the shared wind prefab at runtime, keeping this
+        // builder in sync with every other geyser in the project.
         TimedGeyser geyser = geyserObject.AddComponent<TimedGeyser>();
-        geyser.Initialize(1.5f, 4f, 18f, blastVisual, countdown);
+        geyser.Initialize(1.5f, 4f, 18f, null, countdown);
         return geyser;
     }
 
