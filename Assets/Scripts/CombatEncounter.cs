@@ -1,8 +1,9 @@
-using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Owns one encounter from trigger entry through battle resolution and return
@@ -132,8 +133,9 @@ public class CombatEncounter : MonoBehaviour
         }
         else
         {
-            //TODO: PUT GAME OVER HERE
             playerAnimator.PlayAnimationTrigger("Player Death");
+            FadeManager.ShowFade(() => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
+
         }
         yield return new WaitForSeconds(ActionResultPause);
 

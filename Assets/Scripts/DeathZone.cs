@@ -25,7 +25,7 @@ public class DeathZone : MonoBehaviour
 
         if (reloadSceneIfNoRespawn)
         {
-            other.gameObject.SetActive(false);
+            other.GetComponent<PlayerAnimator>().PlayAnimationTrigger("Player Death");
             Scene activeScene = SceneManager.GetActiveScene();
             string sceneToReload = string.IsNullOrEmpty(activeScene.path)
                 ? activeScene.name
