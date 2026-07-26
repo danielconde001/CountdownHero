@@ -30,7 +30,7 @@ MonoBehaviour:
     MusicVolume: 0.2
     MusicOn: 1
     MutedMusicVolume: 0
-    SfxVolume: 0.5
+    SfxVolume: 0.25
     SfxOn: 1
     MutedSfxVolume: 0
     UIVolume: 1
