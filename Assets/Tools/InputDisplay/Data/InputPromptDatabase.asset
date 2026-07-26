@@ -53,3 +53,13 @@ MonoBehaviour:
     xbox: {fileID: 21300000, guid: 96d21b0817b1cf14d8ad4112e24aeba6, type: 3}
     playStation: {fileID: 21300000, guid: 8a210f7307e1af74c8f52d4384e8399f, type: 3}
     nintendo: {fileID: 21300000, guid: fd1fcc27b1a2be54b8b2bbe2b188f020, type: 3}
+  - controlPath: <Keyboard>/q
+    generic: {fileID: 21300000, guid: 24551b5517501db448b7ff045e50c42d, type: 3}
+    xbox: {fileID: 0}
+    playStation: {fileID: 0}
+    nintendo: {fileID: 0}
+  - controlPath: <Gamepad>/buttonEast
+    generic: {fileID: 21300000, guid: 293cbd739dcb92c4e80ce062c5c903f6, type: 3}
+    xbox: {fileID: 21300000, guid: 96d21b0817b1cf14d8ad4112e24aeba6, type: 3}
+    playStation: {fileID: 21300000, guid: 9749d63b48c5cb84d8c1b8cb8b2b16b6, type: 3}
+    nintendo: {fileID: 21300000, guid: c0c473b4a48485245a9df85f1b34d354, type: 3}
