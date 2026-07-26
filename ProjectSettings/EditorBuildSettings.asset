@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Prototype Levels/PrototypeMovement.unity
-    guid: e84c8202f5182ea4893ffd5aaf154781
+    path: Assets/Scenes/Main Menu.unity
+    guid: 2406337a9e55ac448b5879c1251e41f2
   - enabled: 1
     path: Assets/Scenes/Intro.unity
     guid: d8b587a919c8b2746a3b905245ee7ae5
@@ -37,7 +37,7 @@ EditorBuildSettings:
     guid: e50975a64bbe8634cbd558a4e9f6bcbe
   - enabled: 1
     path: Assets/Scenes/Combat/Combat 1.unity
-    guid: 6a8ab8512d738d0418b77296ca4ce4e7
+    guid: 00c76be3e98d56748b337bc7c5eb4ab2
   - enabled: 1
     path: Assets/Scenes/Platforming Levels/Platforming 2 - 1.unity
     guid: eb6a59eab2130434aa5087deeda4bee1
@@ -46,7 +46,7 @@ EditorBuildSettings:
     guid: 322adfbbfc2b8e844b6706ffc0b0802b
   - enabled: 1
     path: Assets/Scenes/Combat/Combat 2.unity
-    guid: d9fc0a64f749677478403fa5c8a7e4f0
+    guid: 9066ddb39c8c2704ca00ee2c813f796b
   - enabled: 1
     path: Assets/Scenes/Platforming Levels/Platforming 3 - 1.unity
     guid: 39c62dcd0f8ba454faf5967676a3ec95
