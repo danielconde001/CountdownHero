@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public enum TimingJudgement
 {
@@ -109,6 +110,8 @@ public static class TextMeshFontUtility
         if (textRenderer != null)
         {
             textRenderer.sharedMaterial = textMesh.font.material;
+            textRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            textRenderer.receiveShadows = false;
         }
     }
 }
