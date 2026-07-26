@@ -39,10 +39,12 @@ public class CombatEncounter : MonoBehaviour
 
     [Header("Feedback")]
     [SerializeField] private MMF_Player battleStartFeedback;
-    [SerializeField] private MMF_Player battleBeforeAttackFeedback;
-    [SerializeField] private MMF_Player battleAttackFeedback;
-    [SerializeField] private MMF_Player battleDefendFeedback;
-    [SerializeField] private MMF_Player battleMissFeedback;
+    [SerializeField] private MMF_Player battleBeforeActionFeedback;
+    [SerializeField] private MMF_Player battlePlayerAttackFeedback;
+    [SerializeField] private MMF_Player battlePlayerMissFeedback;
+    [SerializeField] private MMF_Player battleEnemyAttackFeedback;
+    [SerializeField] private MMF_Player battlePlayerDefendFeedback;
+    [SerializeField] private MMF_Player battlePlayerHealFeedback;
     [SerializeField] private MMF_Player battleEndFeedback;
 
     private bool hasStarted;
@@ -174,39 +176,39 @@ public class CombatEncounter : MonoBehaviour
 
             foreach (CombatantAttackStrike strike in selectedAttack.Strikes)
             {
-                battleBeforeAttackFeedback.PlayFeedbacks();
+                battleBeforeActionFeedback.PlayFeedbacks();
                 TimingJudgement defenseJudgement = TimingJudgement.Miss;
                 yield return PlayCountdown(
                     strike.CountdownPattern,
                     result => defenseJudgement = result);
                 
-                battleBeforeAttackFeedback.StopFeedbacks();
+                battleBeforeActionFeedback.StopFeedbacks();
                 enemyAnimator.SetTrigger("Enemy Attack");
 
                 switch(defenseJudgement)
                 {
                     case TimingJudgement.TooEarly:
                     {
-                        battleMissFeedback.PlayFeedbacks();
+                        battleEnemyAttackFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Take Hit");
                         break;
                     }
                     case TimingJudgement.Miss:
                     {
-                        battleMissFeedback.PlayFeedbacks();
+                        battleEnemyAttackFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Take Hit");
                         break;
                     }
 
                     case TimingJudgement.Good:
                     {
-                        battleDefendFeedback.PlayFeedbacks();
+                        battlePlayerDefendFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Defending");
                         break;
                     }
                     case TimingJudgement.Perfect:
                     {
-                        battleDefendFeedback.PlayFeedbacks();
+                        battlePlayerDefendFeedback.PlayFeedbacks();
                         playerAnimator.PlayAnimationTrigger("Player Defending");
                         break;
                     }
@@ -277,34 +279,34 @@ public class CombatEncounter : MonoBehaviour
 
         foreach (CombatantAttackStrike strike in attack.Strikes)
         {
-            battleBeforeAttackFeedback.PlayFeedbacks();
+            battleBeforeActionFeedback.PlayFeedbacks();
             TimingJudgement judgement = TimingJudgement.Miss;
             yield return PlayCountdown(
                 strike.CountdownPattern,
                 result => judgement = result);
 
-            battleBeforeAttackFeedback.StopFeedbacks();
+            battleBeforeActionFeedback.StopFeedbacks();
 
             switch(judgement)
             {
                 case TimingJudgement.Perfect:
                 {
-                    battleAttackFeedback.PlayFeedbacks();
+                    battlePlayerAttackFeedback.PlayFeedbacks();
                     break;
                 }
                 case TimingJudgement.Good:
                 {
-                    battleAttackFeedback.PlayFeedbacks();
+                    battlePlayerAttackFeedback.PlayFeedbacks();
                     break;
                 }
                 case TimingJudgement.Miss:
                 {
-                    battleMissFeedback.PlayFeedbacks();
+                    battlePlayerMissFeedback.PlayFeedbacks();
                     break;
                 }
                 case TimingJudgement.TooEarly:
                 {
-                    battleMissFeedback.PlayFeedbacks();
+                    battlePlayerMissFeedback.PlayFeedbacks();
                     break;
                 }
             }
@@ -316,14 +318,25 @@ public class CombatEncounter : MonoBehaviour
             encounterLabel.text = FormatResult(judgement, damage, "DAMAGE");
             UpdateHealthDisplay();
 
+            if(judgement == TimingJudgement.Perfect || judgement == TimingJudgement.Good)
+            {
+                if(enemyCombatant.IsDefeated == true)
+                {
+                    enemyAnimator.SetTrigger("Enemy Death");
+                    
+                }
+                else
+                {
+                    enemyAnimator.SetTrigger("Enemy Take Hit");
+                }
+            }
+
             if(enemyCombatant.IsDefeated == true)
             {
-                enemyAnimator.SetTrigger("Enemy Death");
                 StartCoroutine(MoveToAttackPositionAndStay(playerController2D.transform));
             }
             else
             {
-                enemyAnimator.SetTrigger("Enemy Take Hit");
                 StartCoroutine(MoveToAttackPositionAndGoBack(playerController2D.transform));
             }
 
@@ -341,6 +354,8 @@ public class CombatEncounter : MonoBehaviour
         encounterLabel.text = "HEAL";
         yield return new WaitForSeconds(IntroPause);
 
+        battleBeforeActionFeedback.PlayFeedbacks();
+
         TimingJudgement judgement = TimingJudgement.Miss;
         yield return PlayCountdown(
             playerProfile.HealPattern,
@@ -353,7 +368,10 @@ public class CombatEncounter : MonoBehaviour
             _ => 0
         };
 
-        //TODO: ADD PLAYER HEAL ANIMATION TRIGGER HERE
+        battleBeforeActionFeedback.StopFeedbacks();
+        battlePlayerHealFeedback.PlayFeedbacks();
+        playerAnimator.PlayAnimationTrigger("Player Healing");
+
         int healthBefore = playerCombatant.CurrentHealth;
         playerCombatant.Heal(healAmount);
         int restoredHealth = playerCombatant.CurrentHealth - healthBefore;
@@ -464,6 +482,7 @@ public class CombatEncounter : MonoBehaviour
             yield return null;
         }
 
+        playerAnimator.ResetAnimatorForBattleMode();
         player.position = playerBattlePoint.position;
         enemy.position = enemyBattlePoint.position;
     }

@@ -23,6 +23,25 @@ public class PlayerAnimator : MonoBehaviour
         playerAnimator.SetTrigger(triggerName);
     }
 
+    public void ResetAnimatorForBattleMode()
+    {
+        if(isMoving == true)
+        {
+            playerIdleFeedback.PlayFeedbacks();
+            playerRunningFeedback.StopFeedbacks();
+            playerAnimator.SetBool("Player Moving", false);
+            isMoving = false;
+        }
+
+        if(isAirborne == true)
+        {
+            playerJumpingFeedback.StopFeedbacks();
+            playerLandingFeedback.PlayFeedbacks();
+            playerAnimator.SetBool("Player Airborne", false);
+            isAirborne = false;
+        }
+    }
+
     private void Update()
     {
         if(playerController2D.IsControlLocked == false)
@@ -76,17 +95,13 @@ public class PlayerAnimator : MonoBehaviour
         }
         else
         {
-            if(isMoving == true)
-            {
-                playerIdleFeedback.PlayFeedbacks();
-                playerRunningFeedback.StopFeedbacks();
-                playerAnimator.SetBool("Player Moving", false);
-                isMoving = false;
-            }
-
             if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Player Idle") == true && playerIdleFeedback.IsPlaying == false)
             {
                 playerIdleFeedback.PlayFeedbacks();
+            }
+            else if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Player Idle") != true && playerIdleFeedback.IsPlaying == true)
+            {
+                playerIdleFeedback.StopFeedbacks();
             }
         }
     }
